@@ -122,7 +122,7 @@ export default function Dashboard() {
                     </Link>
                     {/* LEITURA SEGURA COM '?.' PARA EVITAR TELA BRANCA */}
                     <a href={`/catalogo/${cat?.slug || cat?.id}`} target="_blank" rel="noreferrer" className="flex-1 md:flex-none h-12 bg-[#007AFF] text-white font-medium px-5 rounded-xl flex items-center justify-center gap-2 transition-all hover:bg-[#0066D6] shadow-[0_4px_15px_rgba(0,122,255,0.3)] active:scale-95">
-                      <ExternalLink size={18} /> Ver Loja
+                      <ExternalLink size={18} /> Ver Catálogo
                     </a>
                   </div>
                 </div>
