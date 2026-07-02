@@ -42,16 +42,29 @@ export default function Formulario() {
 
   const defaultThemeColor = '#007AFF';
 
+  // TRAVA DE SEGURANÇA NO USEEFFECT
   useEffect(() => {
-    async function checkUser() {
+    async function checkUserAndCatalog() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         navigate('/login');
-      } else {
-        setCurrentUser(user);
+        return;
+      }
+      
+      setCurrentUser(user);
+
+      // Se o utilizador já tiver um catálogo, manda-o diretamente para o Dashboard (impede o bug do botão voltar)
+      const { data } = await supabase
+        .from('catalogos')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (data) {
+        navigate('/dashboard', { replace: true });
       }
     }
-    checkUser();
+    checkUserAndCatalog();
   }, [navigate]);
 
   const handleLogout = async () => {
@@ -121,21 +134,34 @@ export default function Formulario() {
         }
       }
 
-      // --- CRIAÇÃO DO LINK (SLUG) ---
+      // --- LÓGICA DE SLUG INTELIGENTE ---
       const slugBase = storeName
         .toLowerCase()
+        .trim()
         .normalize("NFD") 
         .replace(/[\u0300-\u036f]/g, "") 
         .replace(/[^a-z0-9]+/g, '-') 
         .replace(/(^-|-$)+/g, ''); 
       
-      const linkSlug = `${slugBase}-${Math.floor(1000 + Math.random() * 9000)}`;
+      let finalSlug = slugBase;
 
-      const { data, error } = await supabase
+      // Verifica se o slug limpo já existe no banco
+      const { data: existingSlug } = await supabase
+        .from('catalogos')
+        .select('slug')
+        .eq('slug', slugBase)
+        .maybeSingle();
+
+      // Só adiciona o número aleatório se já existir alguém com esse link!
+      if (existingSlug) {
+        finalSlug = `${slugBase}-${Math.floor(1000 + Math.random() * 9000)}`;
+      }
+
+      const { error } = await supabase
         .from('catalogos')
         .insert([{
           user_id: currentUser.id,
-          slug: linkSlug, // Salvando o slug
+          slug: finalSlug,
           store_name: storeName,
           whatsapp: whatsapp,
           instagram: instagram,
@@ -147,12 +173,14 @@ export default function Formulario() {
           ligas: ligas,
           moeda: moeda,
           precos: precos
-        }])
-        .select();
+        }]);
 
       if (error) throw error;
 
-      if (data && data[0]) navigate(`/catalogo/${data[0].slug}`); 
+      alert("Catálogo criado com sucesso!");
+      
+      // Usa o replace para apagar do histórico do celular, impedindo que o utilizador volte com o botão voltar
+      navigate('/dashboard', { replace: true });
       
     } catch (error: any) {
       console.error('Erro ao guardar catálogo:', error);

@@ -10,8 +10,8 @@ export default function Dashboard() {
 
   // SIMULAÇÃO DE COMPRAS
   const [unlockedEditor] = useState(false);
-const [unlockedVideos] = useState(false);
-const [unlockedArts] = useState(false);
+  const [unlockedVideos] = useState(false);
+  const [unlockedArts] = useState(false);
 
   const videoRef1 = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
@@ -98,29 +98,30 @@ const [unlockedArts] = useState(false);
                 <div key={cat.id} className="bg-[#161b26] rounded-3xl p-5 md:p-6 border border-white/5 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 hover:border-white/10 transition-all">
                   
                   <div className="flex items-center gap-4 w-full md:w-auto">
-                    <div className="w-16 h-16 rounded-full border-2 bg-[#0d1117] flex items-center justify-center overflow-hidden flex-shrink-0" style={{ borderColor: cat.theme_color || '#007AFF' }}>
-                      {cat.logo_url ? (
+                    <div className="w-16 h-16 rounded-full border-2 bg-[#0d1117] flex items-center justify-center overflow-hidden flex-shrink-0" style={{ borderColor: cat?.theme_color || '#007AFF' }}>
+                      {cat?.logo_url ? (
                         <img src={cat.logo_url} alt="Logo" className="w-full h-full object-cover" />
                       ) : (
-                        <span className="text-xl font-black italic" style={{ color: cat.theme_color || '#007AFF' }}>
-                          {cat.store_name?.substring(0, 2).toUpperCase() || 'HK'}
+                        <span className="text-xl font-black italic" style={{ color: cat?.theme_color || '#007AFF' }}>
+                          {cat?.store_name?.substring(0, 2).toUpperCase() || 'HK'}
                         </span>
                       )}
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-white mb-1">{cat.store_name || 'Loja Sem Nome'}</h3>
+                      <h3 className="text-lg font-bold text-white mb-1">{cat?.store_name || 'Loja Sem Nome'}</h3>
                       <div className="flex items-center gap-2">
-                        <span className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: cat.theme_color || '#007AFF' }}></span>
+                        <span className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: cat?.theme_color || '#007AFF' }}></span>
                         <span className="text-xs text-gray-400 uppercase font-semibold tracking-wider">Tema Ativo</span>
                       </div>
                     </div>
                   </div>
                   
                   <div className="flex items-center gap-3 w-full md:w-auto">
-                    <Link to={`/editar/${cat.id}`} className="flex-1 md:flex-none h-12 bg-[#0d1117] border border-white/10 hover:border-white/30 text-white font-medium px-5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95">
+                    <Link to={`/editar/${cat?.id}`} className="flex-1 md:flex-none h-12 bg-[#0d1117] border border-white/10 hover:border-white/30 text-white font-medium px-5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95">
                       <Edit size={18} /> Editar
                     </Link>
-                    <a href={`/catalogo/${cat.slug || cat.id}`} target="_blank" rel="noreferrer" className="flex-1 md:flex-none h-12 bg-[#007AFF] text-white font-medium px-5 rounded-xl flex items-center justify-center gap-2 transition-all hover:bg-[#0066D6] shadow-[0_4px_15px_rgba(0,122,255,0.3)] active:scale-95">
+                    {/* LEITURA SEGURA COM '?.' PARA EVITAR TELA BRANCA */}
+                    <a href={`/catalogo/${cat?.slug || cat?.id}`} target="_blank" rel="noreferrer" className="flex-1 md:flex-none h-12 bg-[#007AFF] text-white font-medium px-5 rounded-xl flex items-center justify-center gap-2 transition-all hover:bg-[#0066D6] shadow-[0_4px_15px_rgba(0,122,255,0.3)] active:scale-95">
                       <ExternalLink size={18} /> Ver Loja
                     </a>
                   </div>
