@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
-import { Shirt, Truck, MousePointerClick, ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
-import { Link, useParams } from 'react-router-dom';
+import { Shirt, Truck, ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
+import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
 export default function Catalogo() {

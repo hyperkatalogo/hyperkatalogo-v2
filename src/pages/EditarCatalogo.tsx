@@ -11,7 +11,7 @@ export default function EditarCatalogo() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // SIMULAÇÃO DO PREMIUM (Mude para true para ver como fica após a compra)
-  const [unlockedEditor, setUnlockedEditor] = useState(false);
+  const [unlockedEditor] = useState(false);
 
   const [storeName, setStoreName] = useState('');
   const [whatsapp, setWhatsapp] = useState('');

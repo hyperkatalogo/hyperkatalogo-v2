@@ -9,9 +9,9 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   // SIMULAÇÃO DE COMPRAS
-  const [unlockedEditor, setUnlockedEditor] = useState(false); 
-  const [unlockedVideos, setUnlockedVideos] = useState(false);
-  const [unlockedArts, setUnlockedArts] = useState(false);
+  const [unlockedEditor] = useState(false);
+const [unlockedVideos] = useState(false);
+const [unlockedArts] = useState(false);
 
   const videoRef1 = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);

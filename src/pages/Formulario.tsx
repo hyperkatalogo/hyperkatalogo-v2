@@ -12,7 +12,7 @@ export default function Formulario() {
   const [storeName, setStoreName] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [instagram, setInstagram] = useState('');
-  const [facebook, setFacebook] = useState('');
+  const [facebook] = useState('');
   const [tiktok, setTiktok] = useState('');
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
