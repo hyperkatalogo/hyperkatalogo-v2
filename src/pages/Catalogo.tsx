@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { Shirt, Truck, ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
+import { Shirt, Truck, ChevronLeft, ChevronRight, Loader2, Search, MousePointerClick } from "lucide-react";
 import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
@@ -81,7 +81,7 @@ export default function Catalogo() {
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [catalogo, termoPesquisa]); // Adicionado termoPesquisa para atualizar as setas ao filtrar
+  }, [catalogo, termoPesquisa]); 
 
   // CATEGORIAS - MENU RÁPIDO
   const categorias = [
@@ -169,20 +169,69 @@ export default function Catalogo() {
     <div className="min-h-screen w-full bg-[#050505] text-white font-sans relative overflow-x-hidden antialiased" style={{ '--theme': temaCor } as React.CSSProperties}>
       <div className="absolute top-0 left-1/2 -translate-x-1/2 -z-10 blur-[120px] w-full max-w-lg h-80 rounded-full pointer-events-none opacity-20" style={{ backgroundColor: temaCor }} />
 
-      <div className="w-full max-w-sm mx-auto flex flex-col items-center pt-6 px-4 pb-24">
-        {/* LOGO E NOME */}
-        <div className="w-28 h-28 rounded-full border-2 bg-black p-1 flex items-center justify-center overflow-hidden" style={{ borderColor: temaCor, boxShadow: `0 0 25px ${temaCor}60` }}>
+      <div className="w-full max-w-sm mx-auto flex flex-col items-center pt-8 px-4 pb-24">
+        
+        {/* ====== TOPO: SELO ONLINE E AVISO ====== */}
+        <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full mb-5 shadow-sm">
+          <div className="w-2 h-2 bg-[#25D366] rounded-full animate-pulse shadow-[0_0_8px_#25D366]"></div>
+          <span className="text-[10px] font-bold text-gray-300 tracking-widest">ONLINE</span>
+        </div>
+        
+        <h2 className="text-[10px] font-bold text-gray-400 tracking-[0.2em] mb-4 uppercase">
+          Catálogo Oficial
+        </h2>
+
+        {/* LOGO */}
+        <div className="w-28 h-28 rounded-full border-2 bg-black p-1 flex items-center justify-center overflow-hidden" style={{ borderColor: temaCor, boxShadow: `0 0 35px ${temaCor}50` }}>
           {catalogo?.logo_url ? <img src={catalogo.logo_url} className="w-full h-full object-cover rounded-full" /> : <img src="/logo.jpg" className="w-full h-full object-contain rounded-full" />}
         </div>
-        <h1 className="text-3xl font-black tracking-tight text-white uppercase mt-4 mb-8 text-center">{catalogo?.store_name || "HYPERKATÁLOGO"}</h1>
+        
+        {/* NOME DA LOJA */}
+        <h1 className="text-[28px] font-black tracking-tight text-white uppercase mt-5 mb-4 text-center">{catalogo?.store_name || "HYPERKATÁLOGO"}</h1>
 
-        {/* BOTÕES PRINCIPAIS */}
-        <div className="w-full flex flex-col gap-3.5 px-2 mb-12">
-          <button className="w-full h-14 text-white font-bold rounded-full flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]" style={{ backgroundColor: temaCor }}>
-            <Shirt className="w-5 h-5" /> Tabela de medidas
+        {/* ====== MENSAGEM DE INTERAÇÃO ====== */}
+        <div className="flex items-center gap-2 mb-8 opacity-80">
+          <div className="w-6 h-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+            <MousePointerClick size={12} className="text-[#007AFF]" style={{ color: temaCor }} />
+          </div>
+          <span className="text-[9px] font-bold text-gray-400 tracking-[0.1em] uppercase">Clique para interagir com a página</span>
+        </div>
+
+        {/* ====== FALE CONOSCO E REDES SOCIAIS ====== */}
+        <h3 className="text-[11px] font-black tracking-widest text-white uppercase mb-4">FALE CONOSCO:</h3>
+        
+        <div className="flex items-center gap-4 mb-8">
+          {/* INSTAGRAM (Condicional) */}
+          {catalogo?.instagram && (
+            <a href={catalogo.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 bg-[#0d1117] flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all shadow-lg text-gray-300 hover:text-white">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </a>
+          )}
+          
+          {/* WHATSAPP */}
+          <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 bg-[#0d1117] flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all shadow-lg text-gray-300 hover:text-white">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+
+          {/* TIKTOK (Condicional) */}
+          {catalogo?.tiktok && (
+            <a href={catalogo.tiktok} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 bg-[#0d1117] flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all shadow-lg text-gray-300 hover:text-white">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+            </a>
+          )}
+        </div>
+
+        {/* LINHA DE SEPARAÇÃO */}
+        <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent mb-10"></div>
+
+        {/* ====== BOTÕES PRINCIPAIS ====== */}
+        <div className="w-full flex flex-col gap-4 px-2 mb-14">
+          <button className="w-full h-14 text-white font-bold text-sm rounded-full flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]" style={{ backgroundColor: temaCor, boxShadow: `0 4px 20px ${temaCor}40` }}>
+            <Shirt className="w-5 h-5" /> Clique aqui e veja a tabela de medidas
           </button>
-          <button className="w-full h-14 bg-white/5 backdrop-blur-md border-2 text-white font-bold rounded-full flex items-center justify-center gap-3 transition-all hover:bg-white/10" style={{ borderColor: `${temaCor}60` }}>
-            <Truck className="w-5 h-5" style={{ color: temaCor }} /> Rastreie o seu pedido
+          
+          <button className="w-full h-14 bg-[#0d1117] border-2 text-white font-bold text-sm rounded-full flex items-center justify-center gap-3 transition-all hover:bg-white/5" style={{ borderColor: `${temaCor}60` }}>
+            <Truck className="w-5 h-5" style={{ color: temaCor }} /> Rastreie o seu pedido clicando aqui
           </button>
         </div>
 
@@ -299,10 +348,6 @@ export default function Catalogo() {
             </div>
         </div>
       </div>
-
-      <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-[0_4px_25px_rgba(37,211,102,0.4)] transition-all hover:scale-110 active:scale-95 flex items-center justify-center">
-        <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-      </a>
 
     </div>
   );
