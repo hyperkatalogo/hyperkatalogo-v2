@@ -181,87 +181,87 @@ export default function Catalogo() {
         `}
       </style>
       
-      {/* APLICANDO A FONTE NO CONTAINER PRINCIPAL */}
-      <div className="min-h-screen w-full bg-[#050505] text-white relative overflow-x-hidden antialiased" style={{ fontFamily: "'Montserrat', sans-serif", '--theme': temaCor } as React.CSSProperties}>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -z-10 blur-[120px] w-full max-w-lg h-80 rounded-full pointer-events-none opacity-20" style={{ backgroundColor: temaCor }} />
+      {/* APLICANDO A FONTE NO CONTAINER PRINCIPAL COM ANIMAÇÃO FADE-IN */}
+      <div className="min-h-screen w-full bg-[#050505] text-white relative overflow-x-hidden antialiased animate-in fade-in duration-1000" style={{ fontFamily: "'Montserrat', sans-serif", '--theme': temaCor } as React.CSSProperties}>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -z-10 blur-[140px] w-full max-w-2xl h-[400px] rounded-full pointer-events-none opacity-15" style={{ backgroundColor: temaCor }} />
 
-        <div className="w-full max-w-sm mx-auto flex flex-col items-center pt-8 px-4 pb-24">
+        <div className="w-full max-w-sm mx-auto flex flex-col items-center pt-10 px-4 pb-28">
           
           {/* ====== TOPO: SELO ONLINE E AVISO ====== */}
-          <div className="flex items-center gap-2.5 bg-white/10 border border-white/20 px-4 py-2 rounded-full mb-6 shadow-md backdrop-blur-sm">
+          <div className="flex items-center gap-2.5 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full mb-8 shadow-[0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-500 hover:scale-105">
             <div className="w-2.5 h-2.5 bg-[#25D366] rounded-full animate-pulse shadow-[0_0_12px_2px_#25D366]"></div>
             <span className="text-xs font-black text-white tracking-[0.2em]">ONLINE</span>
           </div>
           
-          <h2 className="text-[10px] font-bold text-gray-400 tracking-[0.2em] mb-4 uppercase">
+          <h2 className="text-[10px] font-bold text-gray-400 tracking-[0.2em] mb-5 uppercase">
             Catálogo Oficial
           </h2>
 
-          {/* LOGO */}
-          <div className="w-28 h-28 rounded-full border-2 bg-black p-1 flex items-center justify-center overflow-hidden" style={{ borderColor: temaCor, boxShadow: `0 0 35px ${temaCor}50` }}>
+          {/* LOGO REFINADA */}
+          <div className="w-28 h-28 rounded-full border-2 bg-black p-1 flex items-center justify-center overflow-hidden transition-all duration-500 hover:scale-105" style={{ borderColor: temaCor, boxShadow: `0 0 45px ${temaCor}40` }}>
             {catalogo?.logo_url ? <img src={catalogo.logo_url} className="w-full h-full object-cover rounded-full" /> : <img src="/logo.jpg" className="w-full h-full object-contain rounded-full" />}
           </div>
           
           {/* NOME DA LOJA */}
-          <h1 className="text-[28px] font-black tracking-tight text-white uppercase mt-5 mb-4 text-center">{catalogo?.store_name || "HYPERKATÁLOGO"}</h1>
+          <h1 className="text-[28px] font-black tracking-tight text-white uppercase mt-6 mb-5 text-center transition-all duration-500 hover:tracking-wide">{catalogo?.store_name || "HYPERKATÁLOGO"}</h1>
 
           {/* ====== MENSAGEM DE INTERAÇÃO ====== */}
-          <div className="flex items-center gap-2 mb-8 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+          <div className="flex items-center gap-2 mb-10 bg-white/5 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10 shadow-lg">
             <MousePointerClick size={16} className="text-[#007AFF] animate-bounce" style={{ color: temaCor }} />
             <span className="text-[10px] font-black text-gray-200 tracking-[0.1em] uppercase">Clique para interagir com a página</span>
           </div>
 
           {/* ====== FALE CONOSCO E REDES SOCIAIS ====== */}
-          <h3 className="text-[11px] font-black tracking-widest text-white uppercase mb-4">FALE CONOSCO:</h3>
+          <h3 className="text-[11px] font-black tracking-widest text-white uppercase mb-5">FALE CONOSCO:</h3>
           
-          <div className="flex items-start justify-center gap-6 mb-8">
-            {/* INSTAGRAM */}
+          <div className="flex items-start justify-center gap-6 mb-10">
+            {/* INSTAGRAM COM COR DA MARCA */}
             {catalogo?.instagram && (
-              <div className="flex flex-col items-center gap-2">
-                <a href={catalogo.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 bg-[#0d1117] flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all shadow-lg text-gray-300 hover:text-white">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              <div className="flex flex-col items-center gap-2.5 group">
+                <a href={catalogo.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full border border-white/20 bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-active:scale-95 text-white shadow-[0_4px_15px_rgba(220,39,67,0.4)]">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                 </a>
-                <span className="text-[9px] font-bold text-gray-400 tracking-wider uppercase">Instagram</span>
+                <span className="text-[9px] font-bold text-gray-400 tracking-wider uppercase group-hover:text-white transition-colors duration-300">Instagram</span>
               </div>
             )}
             
-            {/* WHATSAPP */}
-            <div className="flex flex-col items-center gap-2">
-              <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 bg-[#0d1117] flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all shadow-lg text-gray-300 hover:text-white">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            {/* WHATSAPP COM COR DA MARCA */}
+            <div className="flex flex-col items-center gap-2.5 group">
+              <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full border border-white/20 bg-[#25D366] flex items-center justify-center transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-active:scale-95 text-white shadow-[0_4px_15px_rgba(37,211,102,0.4)]">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
                 </svg>
               </a>
-              <span className="text-[9px] font-bold text-gray-400 tracking-wider uppercase">WhatsApp</span>
+              <span className="text-[9px] font-bold text-gray-400 tracking-wider uppercase group-hover:text-white transition-colors duration-300">WhatsApp</span>
             </div>
 
-            {/* TIKTOK SIMPLES */}
+            {/* TIKTOK COM FUNDO PRETO E GLITCH CIANO/VERMELHO */}
             {catalogo?.tiktok && (
-              <div className="flex flex-col items-center gap-2">
-                <a href={catalogo.tiktok} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 bg-[#0d1117] flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all shadow-lg text-gray-300 hover:text-white">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+              <div className="flex flex-col items-center gap-2.5 group">
+                <a href={catalogo.tiktok} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full border border-white/20 bg-black flex items-center justify-center transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-active:scale-95 text-white shadow-[0_4px_15px_rgba(0,0,0,0.6)]">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(1.5px 1.5px 0 #fe0050) drop-shadow(-1.5px -1.5px 0 #00f2fe)' }}><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
                 </a>
-                <span className="text-[9px] font-bold text-gray-400 tracking-wider uppercase">TikTok</span>
+                <span className="text-[9px] font-bold text-gray-400 tracking-wider uppercase group-hover:text-white transition-colors duration-300">TikTok</span>
               </div>
             )}
           </div>
 
           {/* LINHA DE SEPARAÇÃO COM A COR DO TEMA AUMENTADA E MAIS ESPESSA */}
-          <div className="w-48 h-[2px] mb-10 opacity-80" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+          <div className="w-48 h-[2px] mb-12 opacity-80" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
 
           {/* ====== BOTÕES PRINCIPAIS COM TEXTO AJUSTADO ====== */}
           <div className="w-full flex flex-col gap-4 px-2 mb-12">
-            <button className="w-full h-14 px-4 text-white font-bold text-[11px] sm:text-xs tracking-wider uppercase rounded-full flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98] text-center leading-tight" style={{ backgroundColor: temaCor, boxShadow: `0 4px 20px ${temaCor}40` }}>
+            <a href="https://drive.google.com/drive/folders/1huxHu6yQruZTX-2E0vQTMHyW68tFnrsF?usp=share_link" target="_blank" rel="noopener noreferrer" className="w-full h-[60px] px-4 text-white font-bold text-[11px] sm:text-xs tracking-wider uppercase rounded-full flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98] hover:-translate-y-1 text-center leading-tight shadow-lg" style={{ backgroundColor: temaCor, boxShadow: `0 4px 20px ${temaCor}40` }}>
               <Shirt className="w-5 h-5 flex-shrink-0" /> CLIQUE AQUI E VEJA A TABELA DE MEDIDAS
-            </button>
+            </a>
             
-            <button className="w-full h-14 px-4 bg-[#0d1117] border-2 text-white font-bold text-[11px] sm:text-xs tracking-wider uppercase rounded-full flex items-center justify-center gap-3 transition-all hover:bg-white/5 text-center leading-tight" style={{ borderColor: `${temaCor}60` }}>
+            <a href="https://melhorrastreio.com.br/" target="_blank" rel="noopener noreferrer" className="w-full h-[60px] px-4 bg-[#0d1117] border-2 text-white font-bold text-[11px] sm:text-xs tracking-wider uppercase rounded-full flex items-center justify-center gap-3 transition-all hover:bg-white/5 hover:-translate-y-1 text-center leading-tight shadow-lg" style={{ borderColor: `${temaCor}60` }}>
               <Truck className="w-5 h-5 flex-shrink-0" style={{ color: temaCor }} /> RASTREIE O SEU PEDIDO CLICANDO AQUI
-            </button>
+            </a>
           </div>
 
           {/* ====== MENU RÁPIDO ====== */}
-          <div className="w-full mb-10 px-2">
+          <div className="w-full mb-4 px-2">
             <div className="flex items-center gap-2 mb-5">
               <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">MENU RÁPIDO:</h3>
               <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
@@ -269,7 +269,7 @@ export default function Catalogo() {
             
             <div className="relative flex items-center w-full">
               {showMenuLeft && (
-                <button onClick={() => scroll(menuRef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
+                <button onClick={() => scroll(menuRef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
                   <ChevronLeft className="w-5 h-5" />
                 </button>
               )}
@@ -289,7 +289,7 @@ export default function Catalogo() {
               </div>
 
               {showMenuRight && (
-                <button onClick={() => scroll(menuRef, 'right')} className="absolute -right-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
+                <button onClick={() => scroll(menuRef, 'right')} className="absolute -right-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
                   <ChevronRight className="w-5 h-5" />
                 </button>
               )}
@@ -297,8 +297,13 @@ export default function Catalogo() {
           </div>
 
           {/* ====== BANNERS GIGANTES ====== */}
-          <div className="w-full mb-8 px-2 flex flex-col gap-6">
-              
+          {/* ====== BANNERS GIGANTES ====== */}
+<div className="w-full mb-8 px-2 flex flex-col gap-6">
+    <div className="flex items-center gap-3 mb-0">
+      <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">CATEGORIAS EM DESTAQUE:</h3>
+                <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+              </div>
+
               <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="w-full rounded-3xl overflow-hidden border-2 transition-transform hover:scale-[1.02] active:scale-[0.98]" style={{ borderColor: `${temaCor}40` }}>
                 <img src="/corta-vento.jpg" className="w-full h-auto block" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
               </a>
