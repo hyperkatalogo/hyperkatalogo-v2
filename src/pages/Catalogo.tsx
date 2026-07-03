@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { Shirt, Truck, ChevronLeft, ChevronRight, Loader2, Search, MousePointerClick } from "lucide-react";
+import { Shirt, Truck, ChevronLeft, ChevronRight, Loader2, Search, MousePointerClick, X } from "lucide-react";
 import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
@@ -10,6 +10,7 @@ export default function Catalogo() {
 
   // ESTADO DA BARRA DE PESQUISA
   const [termoPesquisa, setTermoPesquisa] = useState('');
+  const isSearching = termoPesquisa.length > 0;
 
   const menuRef = useRef<HTMLDivElement>(null);
   const selecoesRef = useRef<HTMLDivElement>(null);
@@ -49,7 +50,8 @@ export default function Catalogo() {
 
   useEffect(() => {
     if (catalogo) {
-      document.title = catalogo.store_name ? `${catalogo.store_name} | HyperKatalogo` : 'HyperKatalogo';
+      // Força o título a ser APENAS o nome da loja, removendo qualquer sujeira
+      document.title = catalogo.store_name || 'HyperKatalogo';
       let favicon = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
       if (!favicon) {
         favicon = document.createElement("link");
@@ -73,11 +75,15 @@ export default function Catalogo() {
   };
 
   useEffect(() => {
-    updateArrows(menuRef, setShowMenuLeft, setShowMenuRight);
-    updateArrows(selecoesRef, setShowSelLeft, setShowSelRight);
-    const handleResize = () => {
+    if (!isSearching) {
       updateArrows(menuRef, setShowMenuLeft, setShowMenuRight);
       updateArrows(selecoesRef, setShowSelLeft, setShowSelRight);
+    }
+    const handleResize = () => {
+      if (!isSearching) {
+        updateArrows(menuRef, setShowMenuLeft, setShowMenuRight);
+        updateArrows(selecoesRef, setShowSelLeft, setShowSelRight);
+      }
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -154,10 +160,12 @@ export default function Catalogo() {
     { id: 57, img: "/VENEZUELA.png", name: "VENEZUELA", link: "https://photos.app.goo.gl/VFmSGpo4tL22bbP97" },
   ];
 
-  // LÓGICA DE FILTRAGEM (Pesquisa)
-  const selecoesFiltradas = selecoesItems.filter(item => 
-    item.name.toLowerCase().includes(termoPesquisa.toLowerCase())
-  );
+  // LÓGICA DE FILTRAGEM (Pesquisa Ignorando Acentos e Maiúsculas/Minúsculas)
+  const selecoesFiltradas = selecoesItems.filter(item => {
+    const nomeNormalizado = item.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const pesquisaNormalizada = termoPesquisa.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    return nomeNormalizado.includes(pesquisaNormalizada);
+  });
 
   if (loading) return <div className="min-h-screen bg-[#050505] flex items-center justify-center"><Loader2 size={40} className="animate-spin text-[#007AFF]" /></div>;
 
@@ -172,9 +180,9 @@ export default function Catalogo() {
       <div className="w-full max-w-sm mx-auto flex flex-col items-center pt-8 px-4 pb-24">
         
         {/* ====== TOPO: SELO ONLINE E AVISO ====== */}
-        <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full mb-5 shadow-sm">
-          <div className="w-2 h-2 bg-[#25D366] rounded-full animate-pulse shadow-[0_0_8px_#25D366]"></div>
-          <span className="text-[10px] font-bold text-gray-300 tracking-widest">ONLINE</span>
+        <div className="flex items-center gap-2.5 bg-white/10 border border-white/20 px-4 py-2 rounded-full mb-6 shadow-md backdrop-blur-sm">
+          <div className="w-2.5 h-2.5 bg-[#25D366] rounded-full animate-pulse shadow-[0_0_12px_2px_#25D366]"></div>
+          <span className="text-xs font-black text-white tracking-[0.2em]">ONLINE</span>
         </div>
         
         <h2 className="text-[10px] font-bold text-gray-400 tracking-[0.2em] mb-4 uppercase">
@@ -190,18 +198,16 @@ export default function Catalogo() {
         <h1 className="text-[28px] font-black tracking-tight text-white uppercase mt-5 mb-4 text-center">{catalogo?.store_name || "HYPERKATÁLOGO"}</h1>
 
         {/* ====== MENSAGEM DE INTERAÇÃO ====== */}
-        <div className="flex items-center gap-2 mb-8 opacity-80">
-          <div className="w-6 h-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-            <MousePointerClick size={12} className="text-[#007AFF]" style={{ color: temaCor }} />
-          </div>
-          <span className="text-[9px] font-bold text-gray-400 tracking-[0.1em] uppercase">Clique para interagir com a página</span>
+        <div className="flex items-center gap-2 mb-8 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+          <MousePointerClick size={16} className="text-[#007AFF] animate-bounce" style={{ color: temaCor }} />
+          <span className="text-[10px] font-black text-gray-200 tracking-[0.1em] uppercase">Clique para interagir com a página</span>
         </div>
 
         {/* ====== FALE CONOSCO E REDES SOCIAIS ====== */}
         <h3 className="text-[11px] font-black tracking-widest text-white uppercase mb-4">FALE CONOSCO:</h3>
         
         <div className="flex items-center gap-4 mb-8">
-          {/* INSTAGRAM (Condicional) */}
+          {/* INSTAGRAM */}
           {catalogo?.instagram && (
             <a href={catalogo.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 bg-[#0d1117] flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all shadow-lg text-gray-300 hover:text-white">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
@@ -210,17 +216,15 @@ export default function Catalogo() {
           
           {/* WHATSAPP */}
           <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 bg-[#0d1117] flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all shadow-lg text-gray-300 hover:text-white">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
             </svg>
           </a>
 
-          {/* TIKTOK (Condicional) */}
+          {/* TIKTOK SIMPLES */}
           {catalogo?.tiktok && (
             <a href={catalogo.tiktok} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 bg-[#0d1117] flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all shadow-lg text-gray-300 hover:text-white">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 15.68a6.32 6.32 0 0 0 6.27 6.32 6.32 0 0 0 6.27-6.31V8.2a8.36 8.36 0 0 0 5.43 2.05V6.8a4.8 4.8 0 0 1-3.38-1.11z"/>
-              </svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
             </a>
           )}
         </div>
@@ -229,7 +233,7 @@ export default function Catalogo() {
         <div className="w-24 h-[1px] mb-10" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
 
         {/* ====== BOTÕES PRINCIPAIS ====== */}
-        <div className="w-full flex flex-col gap-4 px-2 mb-14">
+        <div className="w-full flex flex-col gap-4 px-2 mb-12">
           <button className="w-full h-14 text-white font-bold text-sm rounded-full flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]" style={{ backgroundColor: temaCor, boxShadow: `0 4px 20px ${temaCor}40` }}>
             <Shirt className="w-5 h-5" /> Clique aqui e veja a tabela de medidas
           </button>
@@ -275,85 +279,120 @@ export default function Catalogo() {
           </div>
         </div>
 
-        {/* ====== BANNERS GIGANTES E BARRA DE PESQUISA ====== */}
-        <div className="w-full mb-10 px-2 flex flex-col gap-6">
+        {/* ====== BANNERS GIGANTES ====== */}
+        <div className="w-full mb-8 px-2 flex flex-col gap-6">
             
-            <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" className="w-full rounded-3xl overflow-hidden border-2 transition-transform hover:scale-[1.02] active:scale-[0.98]" style={{ borderColor: `${temaCor}40` }}>
+            <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="w-full rounded-3xl overflow-hidden border-2 transition-transform hover:scale-[1.02] active:scale-[0.98]" style={{ borderColor: `${temaCor}40` }}>
               <img src="/corta-vento.jpg" className="w-full h-auto block" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
             </a>
             
-            <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" className="w-full rounded-3xl overflow-hidden border-2 transition-transform hover:scale-[1.02] active:scale-[0.98]" style={{ borderColor: `${temaCor}40` }}>
+            <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="w-full rounded-3xl overflow-hidden border-2 transition-transform hover:scale-[1.02] active:scale-[0.98]" style={{ borderColor: `${temaCor}40` }}>
               <img src="/retro.jpg" className="w-full h-auto block" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
             </a>
 
-            {/* BARRA DE PESQUISA (Entre os banners e a FIFA) */}
-            <div className="w-full mt-2">
-              <div className="relative flex items-center w-full h-14 rounded-2xl bg-[#0d1117] border-2 transition-all duration-300 overflow-hidden shadow-lg group focus-within:shadow-[0_0_20px_rgba(255,255,255,0.1)]" 
-                   style={{ borderColor: termoPesquisa ? temaCor : 'rgba(255,255,255,0.1)' }}>
-                <div className="pl-4 pr-3 text-gray-400 group-focus-within:text-white transition-colors">
-                  <Search className="w-5 h-5" />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Procure o clube ou seleção..."
-                  value={termoPesquisa}
-                  onChange={(e) => setTermoPesquisa(e.target.value)}
-                  className="flex-grow h-full bg-transparent text-white text-sm font-medium outline-none placeholder:text-gray-500"
-                />
-              </div>
-            </div>
-
-            {/* BANNER FIFA COM ZOOM (scale-110) E BORDAS ARREDONDADAS PERFEITAS */}
-            <div className="w-full rounded-3xl overflow-hidden border-2 shadow-lg bg-[#0d1117] flex items-center justify-center relative mt-2" style={{ borderColor: `${temaCor}60` }}>
-              <img src="/fifa.jpg" alt="FIFA Banner" loading="lazy" className="w-full h-auto block scale-110 origin-center" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+            {/* NOVO BANNER: ENTREGA RÁPIDA DESCEU PARA CÁ */}
+            <div className="w-full rounded-3xl overflow-hidden border-2 transition-transform hover:scale-[1.02] active:scale-[0.98]" style={{ borderColor: `${temaCor}40` }}>
+              <img src="/entrega_02.jpg" alt="Entrega Rápida" className="w-full h-auto block" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
             </div>
         </div>
 
-        {/* ====== SELEÇÕES ====== */}
-        <div className="w-full px-2">
+        {/* ====== BARRA DE PESQUISA (EM CIMA DO BANNER FIFA) ====== */}
+        <div className="w-full mb-6 px-2 relative z-20">
+          <div className="relative flex items-center w-full h-14 rounded-2xl bg-[#0d1117] border-2 transition-all duration-300 overflow-hidden shadow-lg group focus-within:shadow-[0_0_20px_rgba(255,255,255,0.1)]" 
+               style={{ borderColor: isSearching ? temaCor : 'rgba(255,255,255,0.1)' }}>
+            <div className="pl-4 pr-3 text-gray-400 group-focus-within:text-white transition-colors">
+              <Search className="w-5 h-5" />
+            </div>
+            <input
+              type="text"
+              placeholder="Buscar time ou seleção..."
+              value={termoPesquisa}
+              onChange={(e) => setTermoPesquisa(e.target.value)}
+              className="flex-grow h-full bg-transparent text-white text-sm font-medium outline-none placeholder:text-gray-500"
+            />
+            {isSearching && (
+              <button onClick={() => setTermoPesquisa('')} className="pr-4 text-gray-500 hover:text-white transition-colors">
+                <X size={20} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* ====== CONDICIONAL: SE ESTIVER PESQUISANDO, MOSTRA A GRADE (GRID) ====== */}
+        {isSearching ? (
+          <div className="w-full px-2 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <h3 className="text-sm font-black tracking-widest text-white uppercase mb-6 pl-1">Busca Rápida</h3>
             
-            <div className="flex items-center gap-2 mb-5">
-              <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">SELEÇÕES:</h3>
-              <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
-            </div>
-
-            <div className="relative flex items-center w-full">
-              {showSelLeft && selecoesFiltradas.length > 0 && (
-                <button onClick={() => scroll(selecoesRef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
+            <div className="grid grid-cols-3 gap-y-8 gap-x-3">
+              {selecoesFiltradas.length > 0 ? (
+                selecoesFiltradas.map((item) => {
+                  const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver a seleção de ${item.name.replace('\n', ' ')}`;
+                  return (
+                    <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 group">
+                      <div className="w-[72px] h-[72px] rounded-full border-2 bg-[#151515] flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-110 shadow-md" style={{ borderColor: temaCor }}>
+                        <img src={item.img} alt={item.name.replace('\n', ' ')} className="w-full h-full object-contain p-[10px]" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                      </div>
+                      <span className="text-[10px] font-bold text-center text-gray-300 group-hover:text-white transition-colors whitespace-pre-line leading-tight">{item.name}</span>
+                    </a>
+                  );
+                })
+              ) : (
+                <div className="col-span-3 text-center py-10 text-gray-500 text-sm font-medium bg-[#0d1117] rounded-2xl border border-white/5">
+                  Nenhum time ou seleção encontrado.
+                </div>
               )}
-
-              <div className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden snap-x snap-mandatory min-h-[120px]" ref={selecoesRef} onScroll={() => updateArrows(selecoesRef, setShowSelLeft, setShowSelRight)}>
-                {selecoesFiltradas.length > 0 ? (
-                  selecoesFiltradas.map((item) => {
-                    const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver a seleção de ${item.name.replace('\n', ' ')}`;
-                    return (
-                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2.5 min-w-[80px] snap-center group">
-                        <div className="w-20 h-20 rounded-full border-2 bg-[#151515] flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-md" style={{ borderColor: temaCor }}>
-                          <img src={item.img} alt={item.name.replace('\n', ' ')} className="w-full h-full object-contain p-2" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                        </div>
-                        <span className="text-[9px] font-black uppercase text-center text-gray-400 group-hover:text-white transition-colors whitespace-pre-line">{item.name}</span>
-                      </a>
-                    );
-                  })
-                ) : (
-                  <div className="w-full flex items-center justify-center py-6 text-gray-500 text-sm font-medium">
-                    Nenhum resultado encontrado.
-                  </div>
-                )}
+            </div>
+          </div>
+        ) : (
+          /* ====== LAYOUT NORMAL (APARECE QUANDO A PESQUISA ESTÁ VAZIA) ====== */
+          <>
+            {/* BANNER FIFA COM ZOOM (scale-110) E BORDAS ARREDONDADAS PERFEITAS */}
+            <div className="w-full px-2 mb-10">
+              <div className="w-full rounded-3xl overflow-hidden border-2 shadow-lg bg-[#0d1117] flex items-center justify-center relative" style={{ borderColor: `${temaCor}60` }}>
+                <img src="/fifa.jpg" alt="FIFA Banner" loading="lazy" className="w-full h-auto block scale-110 origin-center" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
               </div>
-
-              {showSelRight && selecoesFiltradas.length > 0 && (
-                <button onClick={() => scroll(selecoesRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              )}
             </div>
-        </div>
+
+            {/* SELEÇÕES HORIZONTAIS */}
+            <div className="w-full px-2">
+                <div className="flex items-center gap-2 mb-5">
+                  <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">SELEÇÕES:</h3>
+                  <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                </div>
+
+                <div className="relative flex items-center w-full">
+                  {showSelLeft && (
+                    <button onClick={() => scroll(selecoesRef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                  )}
+
+                  <div className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden snap-x snap-mandatory min-h-[120px]" ref={selecoesRef} onScroll={() => updateArrows(selecoesRef, setShowSelLeft, setShowSelRight)}>
+                    {selecoesItems.map((item) => {
+                      const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver a seleção de ${item.name.replace('\n', ' ')}`;
+                      return (
+                        <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2.5 min-w-[80px] snap-center group">
+                          <div className="w-20 h-20 rounded-full border-2 bg-[#151515] flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-md" style={{ borderColor: temaCor }}>
+                            <img src={item.img} alt={item.name.replace('\n', ' ')} className="w-full h-full object-contain p-2" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                          </div>
+                          <span className="text-[9px] font-black uppercase text-center text-gray-400 group-hover:text-white transition-colors whitespace-pre-line">{item.name}</span>
+                        </a>
+                      );
+                    })}
+                  </div>
+
+                  {showSelRight && (
+                    <button onClick={() => scroll(selecoesRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  )}
+                </div>
+            </div>
+          </>
+        )}
       </div>
 
-      {/* BOTÃO FLUTUANTE DO WHATSAPP */}
+      {/* BOTÃO FLUTUANTE DO WHATSAPP (Sempre Fixo) */}
       <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-[0_4px_25px_rgba(37,211,102,0.4)] transition-all hover:scale-110 active:scale-95 flex items-center justify-center">
         <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
       </a>
