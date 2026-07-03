@@ -246,17 +246,17 @@ export default function Catalogo() {
             )}
           </div>
 
-          {/* LINHA DE SEPARAÇÃO COM A COR DO TEMA */}
-          <div className="w-24 h-[1px] mb-10" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+          {/* LINHA DE SEPARAÇÃO COM A COR DO TEMA AUMENTADA E MAIS ESPESSA */}
+          <div className="w-48 h-[2px] mb-10 opacity-80" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
 
-          {/* ====== BOTÕES PRINCIPAIS ====== */}
+          {/* ====== BOTÕES PRINCIPAIS COM TEXTO AJUSTADO ====== */}
           <div className="w-full flex flex-col gap-4 px-2 mb-12">
-            <button className="w-full h-14 text-white font-bold text-[13px] tracking-wide rounded-full flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]" style={{ backgroundColor: temaCor, boxShadow: `0 4px 20px ${temaCor}40` }}>
-              <Shirt className="w-5 h-5" /> CLIQUE AQUI E VEJA A TABELA DE MEDIDAS
+            <button className="w-full h-14 px-4 text-white font-bold text-[11px] sm:text-xs tracking-wider uppercase rounded-full flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98] text-center leading-tight" style={{ backgroundColor: temaCor, boxShadow: `0 4px 20px ${temaCor}40` }}>
+              <Shirt className="w-5 h-5 flex-shrink-0" /> CLIQUE AQUI E VEJA A TABELA DE MEDIDAS
             </button>
             
-            <button className="w-full h-14 bg-[#0d1117] border-2 text-white font-bold text-[13px] tracking-wide rounded-full flex items-center justify-center gap-3 transition-all hover:bg-white/5" style={{ borderColor: `${temaCor}60` }}>
-              <Truck className="w-5 h-5" style={{ color: temaCor }} /> RASTREIE O SEU PEDIDO CLICANDO AQUI
+            <button className="w-full h-14 px-4 bg-[#0d1117] border-2 text-white font-bold text-[11px] sm:text-xs tracking-wider uppercase rounded-full flex items-center justify-center gap-3 transition-all hover:bg-white/5 text-center leading-tight" style={{ borderColor: `${temaCor}60` }}>
+              <Truck className="w-5 h-5 flex-shrink-0" style={{ color: temaCor }} /> RASTREIE O SEU PEDIDO CLICANDO AQUI
             </button>
           </div>
 
