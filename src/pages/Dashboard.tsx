@@ -62,7 +62,7 @@ export default function Dashboard() {
       </div>
 
       <div className="w-full max-w-2xl mx-auto mb-10 text-center animate-in fade-in slide-in-from-top-4 duration-700">
-        <h1 className="text-3xl font-semibold tracking-tight mb-2">Painel do Revendedor</h1>
+        <h1 className="text-3xl font-semibold tracking-tight mb-2">Painel do Lojista</h1>
         <p className="text-gray-400">Gerencie o seu catálogo e liberte materiais de alta conversão</p>
       </div>
 
