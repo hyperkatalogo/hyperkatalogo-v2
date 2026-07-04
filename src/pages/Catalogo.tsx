@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
 // ============================================================================
-// DADOS ESTÁTICOS MOVIDOS PARA FORA (Evita re-renderização e economiza memória)
+// DADOS ESTÁTICOS 
 // ============================================================================
 const CATEGORIAS = [
   { id: 1, titulo: "KIT DE ABRIGO", img: "/kit-de-abrigo.png", link: "https://photos.app.goo.gl/AcVbrSbL4imDJSgD8" },
@@ -133,7 +133,7 @@ const SmartImage = memo(({ src, alt, className, eager = false }: any) => {
   );
 });
 
-// 2. Animação de Scroll (Intersection Observer)
+// 2. Animação de Scroll (Scroll Reveal / Fade In on Scroll) - Mais Intensa e Mágica
 const FadeInSection = memo(({ children, className = "", delay = 0 }: any) => {
   const [isVisible, setVisible] = useState(false);
   const domRef = useRef<HTMLDivElement>(null);
@@ -144,14 +144,18 @@ const FadeInSection = memo(({ children, className = "", delay = 0 }: any) => {
         setVisible(true);
         observer.unobserve(domRef.current!);
       }
-    }, { rootMargin: '100px' }); // Renderiza um pouco antes de entrar na tela
+    }, { rootMargin: '0px 0px -40px 0px' }); // O efeito só dispara quando o item já entrou 40px na tela, pra dar tempo do olho ver "nascendo"
 
     if (domRef.current) observer.observe(domRef.current);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div ref={domRef} className={`${className} transition-all duration-[600ms] ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`} style={{ transitionDelay: `${delay}ms` }}>
+    <div 
+      ref={domRef} 
+      className={`${className} transform transition-all duration-[800ms] ease-out ${isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-[0.98]'}`} 
+      style={{ transitionDelay: `${delay}ms` }}
+    >
       {children}
     </div>
   );
@@ -182,7 +186,7 @@ export default function Catalogo() {
   const [showBrasLeft, setShowBrasLeft] = useState(false);
   const [showBrasRight, setShowBrasRight] = useState(true);
 
-  // Busca Inteligente com Cache (Evita recálculos pesados)
+  // Busca Inteligente com Cache
   const todosTimes = useMemo(() => [...SELECOES_ITEMS, ...BRASILEIRAO_ITEMS], []);
   const timesFiltrados = useMemo(() => {
     if (!termoPesquisa) return [];
@@ -253,9 +257,6 @@ export default function Catalogo() {
     return () => window.removeEventListener('resize', handleResize);
   }, [isSearching, updateArrows]); 
 
-  // ============================================================================
-  // TELA DE SKELETON (Carregamento Premium Inteligente)
-  // ============================================================================
   if (loading) return (
     <div className="min-h-screen w-full bg-[#050505] flex flex-col items-center pt-12 px-4 pb-28">
       <div className="w-24 h-8 bg-white/5 animate-pulse rounded-full mb-8" />
@@ -289,6 +290,7 @@ export default function Catalogo() {
 
         <div className="w-full max-w-sm mx-auto flex flex-col items-center pt-10 px-4 pb-28">
           
+          {/* TOPO APARECE DIRETO, SEM DELAY (Above the fold) */}
           <div className="flex items-center gap-2.5 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full mb-8 shadow-[0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-500 hover:scale-105 animate-in fade-in slide-in-from-top-4 duration-700">
             <div className="w-2.5 h-2.5 bg-[#25D366] rounded-full animate-pulse shadow-[0_0_12px_2px_#25D366]"></div>
             <span className="text-xs font-black text-white tracking-[0.2em]">ONLINE</span>
@@ -349,6 +351,10 @@ export default function Catalogo() {
             </a>
           </div>
 
+          {/* ======================================================= */}
+          {/* DAQUI PRA BAIXO O EFEITO MÁGICO DE SCROLL REVEAL ENTRA  */}
+          {/* ======================================================= */}
+
           <FadeInSection className="w-full mb-4 px-2">
             <div className="flex items-center gap-2 mb-5">
               <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">MENU RÁPIDO:</h3>
@@ -361,6 +367,7 @@ export default function Catalogo() {
                   <ChevronLeft className="w-5 h-5" />
                 </button>
               )}
+
               <div ref={menuRef} onScroll={() => updateArrows(menuRef, setShowMenuLeft, setShowMenuRight)} className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {CATEGORIAS.map((cat) => (
                   <a key={cat.id} href={cat.link} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 flex-shrink-0 snap-center group">
@@ -368,10 +375,13 @@ export default function Catalogo() {
                       <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10"></div>
                       <SmartImage src={cat.img} alt={cat.titulo} className="w-full h-full object-cover relative z-0" />
                     </div>
-                    <span className="text-[9px] font-black uppercase text-center text-gray-400 group-hover:text-white transition-colors tracking-wider mt-1 whitespace-pre-line">{cat.titulo}</span>
+                    <span className="text-[9px] font-black uppercase text-center text-gray-400 group-hover:text-white transition-colors tracking-wider mt-1 whitespace-pre-line">
+                      {cat.titulo}
+                    </span>
                   </a>
                 ))}
               </div>
+
               {showMenuRight && (
                 <button onClick={() => scroll(menuRef, 'right')} className="absolute -right-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
                   <ChevronRight className="w-5 h-5" />
@@ -385,28 +395,45 @@ export default function Catalogo() {
                 <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">CATEGORIAS EM DESTAQUE:</h3>
                 <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
               </div>
+
               <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="w-full rounded-3xl overflow-hidden border-2 transition-transform hover:scale-[1.02] active:scale-[0.98]" style={{ borderColor: `${temaCor}40` }}>
                 <SmartImage src="/corta-vento.jpg" eager={true} className="w-full h-auto block" />
               </a>
+              
               <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="w-full rounded-3xl overflow-hidden border-2 transition-transform hover:scale-[1.02] active:scale-[0.98]" style={{ borderColor: `${temaCor}40` }}>
                 <SmartImage src="/retro.jpg" className="w-full h-auto block" />
               </a>
+
               <div className="w-full rounded-3xl overflow-hidden border-2 transition-transform hover:scale-[1.02] active:scale-[0.98]" style={{ borderColor: `${temaCor}40` }}>
                 <SmartImage src="/entrega_02.jpg" alt="Entrega Rápida" className="w-full h-auto block" />
               </div>
           </FadeInSection>
 
           <FadeInSection className="w-full mb-6 px-2 relative z-20">
-            <div className="relative flex items-center w-full h-14 rounded-2xl bg-[#0d1117] border-2 transition-all duration-300 overflow-hidden shadow-lg group focus-within:shadow-[0_0_20px_rgba(255,255,255,0.1)]" style={{ borderColor: isSearching ? temaCor : 'rgba(255,255,255,0.1)' }}>
-              <div className="pl-4 pr-3 text-gray-400 group-focus-within:text-white transition-colors"><Search className="w-5 h-5" /></div>
-              <input type="text" placeholder="Buscar time ou seleção..." value={termoPesquisa} onChange={(e) => setTermoPesquisa(e.target.value)} className="flex-grow h-full bg-transparent text-white text-[13px] font-semibold outline-none placeholder:text-gray-500" />
-              {isSearching && <button onClick={() => setTermoPesquisa('')} className="pr-4 text-gray-500 hover:text-white transition-colors"><X size={20} /></button>}
+            <div className="relative flex items-center w-full h-14 rounded-2xl bg-[#0d1117] border-2 transition-all duration-300 overflow-hidden shadow-lg group focus-within:shadow-[0_0_20px_rgba(255,255,255,0.1)]" 
+                 style={{ borderColor: isSearching ? temaCor : 'rgba(255,255,255,0.1)' }}>
+              <div className="pl-4 pr-3 text-gray-400 group-focus-within:text-white transition-colors">
+                <Search className="w-5 h-5" />
+              </div>
+              <input
+                type="text"
+                placeholder="Buscar time ou seleção..."
+                value={termoPesquisa}
+                onChange={(e) => setTermoPesquisa(e.target.value)}
+                className="flex-grow h-full bg-transparent text-white text-[13px] font-semibold outline-none placeholder:text-gray-500"
+              />
+              {isSearching && (
+                <button onClick={() => setTermoPesquisa('')} className="pr-4 text-gray-500 hover:text-white transition-colors">
+                  <X size={20} />
+                </button>
+              )}
             </div>
           </FadeInSection>
 
           {isSearching ? (
             <div className="w-full px-2 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <h3 className="text-sm font-black tracking-widest text-white uppercase mb-6 pl-1">Busca Rápida</h3>
+              
               <div className="grid grid-cols-3 gap-y-8 gap-x-3">
                 {timesFiltrados.length > 0 ? (
                   timesFiltrados.map((item) => {
@@ -421,7 +448,9 @@ export default function Catalogo() {
                     );
                   })
                 ) : (
-                  <div className="col-span-3 text-center py-10 text-gray-500 text-sm font-semibold bg-[#0d1117] rounded-2xl border border-white/5">Nenhum time ou seleção encontrado.</div>
+                  <div className="col-span-3 text-center py-10 text-gray-500 text-sm font-semibold bg-[#0d1117] rounded-2xl border border-white/5">
+                    Nenhum time ou seleção encontrado.
+                  </div>
                 )}
               </div>
             </div>
@@ -438,10 +467,14 @@ export default function Catalogo() {
                     <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">SELEÇÕES:</h3>
                     <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
                   </div>
+
                   <div className="relative flex items-center w-full">
                     {showSelLeft && (
-                      <button onClick={() => scroll(selecoesRef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronLeft className="w-5 h-5" /></button>
+                      <button onClick={() => scroll(selecoesRef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
                     )}
+
                     <div className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden snap-x snap-mandatory min-h-[120px]" ref={selecoesRef} onScroll={() => updateArrows(selecoesRef, setShowSelLeft, setShowSelRight)}>
                       {SELECOES_ITEMS.map((item) => {
                         const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver a seleção de ${item.name.replace('\n', ' ')}`;
@@ -455,8 +488,11 @@ export default function Catalogo() {
                         );
                       })}
                     </div>
+
                     {showSelRight && (
-                      <button onClick={() => scroll(selecoesRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronRight className="w-5 h-5" /></button>
+                      <button onClick={() => scroll(selecoesRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
                     )}
                   </div>
               </FadeInSection>
@@ -472,10 +508,14 @@ export default function Catalogo() {
                     <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">BRASILEIRÃO:</h3>
                     <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
                   </div>
+
                   <div className="relative flex items-center w-full">
                     {showBrasLeft && (
-                      <button onClick={() => scroll(brasileiraoRef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronLeft className="w-5 h-5" /></button>
+                      <button onClick={() => scroll(brasileiraoRef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
                     )}
+
                     <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden snap-x snap-mandatory min-h-[120px]" ref={brasileiraoRef} onScroll={() => updateArrows(brasileiraoRef, setShowBrasLeft, setShowBrasRight)}>
                       {BRASILEIRAO_ITEMS.map((item) => {
                         const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
@@ -489,8 +529,11 @@ export default function Catalogo() {
                         );
                       })}
                     </div>
+
                     {showBrasRight && (
-                      <button onClick={() => scroll(brasileiraoRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronRight className="w-5 h-5" /></button>
+                      <button onClick={() => scroll(brasileiraoRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95">
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
                     )}
                   </div>
               </FadeInSection>
@@ -498,6 +541,7 @@ export default function Catalogo() {
           )}
         </div>
 
+        {/* BOTÃO FLUTUANTE DO WHATSAPP */}
         <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-[0_4px_25px_rgba(37,211,102,0.4)] transition-all hover:scale-110 active:scale-95 flex items-center justify-center">
           <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
         </a>
