@@ -1,1 +1,29 @@
 @import "tailwindcss";
+@keyframes price-shine {
+    0% {
+      transform: translateX(-180%) skewX(-25deg);
+      opacity: 0;
+    }
+  
+    8% {
+      opacity: 1;
+    }
+  
+    30% {
+      transform: translateX(420%) skewX(-25deg);
+      opacity: 1;
+    }
+  
+    40% {
+      opacity: 0;
+    }
+  
+    100% {
+      transform: translateX(420%) skewX(-25deg);
+      opacity: 0;
+    }
+  }
+  
+  .animate-price-shine {
+    animation: price-shine 4s ease-in-out infinite;
+  }

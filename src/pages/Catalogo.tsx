@@ -476,7 +476,27 @@ export default function Catalogo() {
 
   return (
     <>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');`}</style>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+        
+        /* Animação suave para as linhas de separação dos títulos */
+        @keyframes slide-line {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .animate-slide-line {
+          animation: slide-line 3s infinite ease-in-out;
+        }
+
+        /* Animação Premium do feixe giratório nas bordas dos banners */
+        @keyframes spin-beam {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+          animation: spin-beam 8s linear infinite;
+        }
+      `}</style>
       
       <div className="min-h-screen w-full bg-[#050505] text-white relative overflow-x-hidden antialiased" style={{ fontFamily: "'Montserrat', sans-serif", '--theme': temaCor } as React.CSSProperties}>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -z-10 blur-[140px] w-full max-w-2xl h-[400px] rounded-full pointer-events-none opacity-15" style={{ backgroundColor: temaCor }} />
@@ -546,7 +566,9 @@ export default function Catalogo() {
           <FadeInSection className="w-full mb-4 px-2">
             <div className="flex items-center gap-2 mb-5">
               <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">MENU RÁPIDO:</h3>
-              <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+              <div className="h-[1px] flex-grow bg-white/5 relative overflow-hidden rounded-full">
+                <div className="absolute inset-0 w-full animate-slide-line" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+              </div>
             </div>
             
             <div className="relative flex items-center w-full">
@@ -578,35 +600,54 @@ export default function Catalogo() {
             </div>
           </FadeInSection>
 
-          {/* BANNERS GIGANTES SEPARADOS PARA EFEITO DE SCROLL INDIVIDUAL */}
+          {/* BANNERS GIGANTES COM EFEITO PREMIUM NAS BORDAS */}
           <div className="w-full mb-8 px-2 flex flex-col gap-6">
               <FadeInSection>
                 <div className="flex items-center gap-3 mb-0">
                   <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">CATEGORIAS EM DESTAQUE:</h3>
-                  <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                  <div className="h-[1px] flex-grow bg-white/5 relative overflow-hidden rounded-full">
+                    <div className="absolute inset-0 w-full animate-slide-line" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+                  </div>
                 </div>
               </FadeInSection>
 
+              {/* BANNERS DESTAQUES */}
               <FadeInSection>
-                <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="w-full rounded-3xl overflow-hidden border-[3px] transition-transform hover:scale-[1.02] active:scale-[0.98] block" style={{ borderColor: `${temaCor}40` }}>
-                  <SmartImage src="/corta-vento.jpg" eager={true} className="w-full h-auto block" />
+                <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="relative w-full rounded-3xl block transition-transform hover:scale-[1.02] active:scale-[0.98] group shadow-lg">
+                  <div className="w-full h-full rounded-3xl overflow-hidden bg-[#0d1117]">
+                    <SmartImage src="/corta-vento.jpg" eager={true} className="w-full h-auto block" />
+                  </div>
+                  {/* Borda Estática */}
+                  <div className="absolute inset-0 rounded-3xl border-[3px] pointer-events-none" style={{ borderColor: `${temaCor}40` }}></div>
+                  {/* Laser Animado */}
+                  <div className="absolute inset-0 rounded-3xl pointer-events-none overflow-hidden" style={{ padding: '3px', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }}>
+                    <div className="absolute inset-[-100%] animate-spin-slow opacity-60 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `conic-gradient(from 0deg, transparent 75%, ${temaCor} 100%)` }}></div>
+                  </div>
                 </a>
               </FadeInSection>
               
               <FadeInSection>
-                <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="w-full rounded-3xl overflow-hidden border-[3px] transition-transform hover:scale-[1.02] active:scale-[0.98] block" style={{ borderColor: `${temaCor}40` }}>
-                  <SmartImage src="/retro.jpg" className="w-full h-auto block" />
+                <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="relative w-full rounded-3xl block transition-transform hover:scale-[1.02] active:scale-[0.98] group shadow-lg">
+                  <div className="w-full h-full rounded-3xl overflow-hidden bg-[#0d1117]">
+                    <SmartImage src="/retro.jpg" className="w-full h-auto block" />
+                  </div>
+                  <div className="absolute inset-0 rounded-3xl border-[3px] pointer-events-none" style={{ borderColor: `${temaCor}40` }}></div>
+                  <div className="absolute inset-0 rounded-3xl pointer-events-none overflow-hidden" style={{ padding: '3px', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }}>
+                    <div className="absolute inset-[-100%] animate-spin-slow opacity-60 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `conic-gradient(from 0deg, transparent 75%, ${temaCor} 100%)` }}></div>
+                  </div>
                 </a>
               </FadeInSection>
 
               {/* ======================================================= */}
-              {/* NOVO CARROSSEL DE PREÇOS (Cards Animados e Dinâmicos)     */}
+              {/* TABELA DE PREÇOS (Cards Estáticos Limpos)                 */}
               {/* ======================================================= */}
               {precosFormatados.length > 0 && (
                 <FadeInSection className="w-full mt-2 mb-2">
                   <div className="flex items-center gap-3 mb-4">
                     <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">TABELA DE PREÇOS:</h3>
-                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                    <div className="h-[1px] flex-grow bg-white/5 relative overflow-hidden rounded-full">
+                      <div className="absolute inset-0 w-full animate-slide-line" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+                    </div>
                   </div>
                   
                   <div className="relative flex items-center w-full">
@@ -616,12 +657,31 @@ export default function Catalogo() {
                       </button>
                     )}
 
-                    <div ref={precosRef} onScroll={() => updateArrows(precosRef, setShowPrecosLeft, setShowPrecosRight)} className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden snap-x snap-mandatory">
+                    <div ref={precosRef} onScroll={() => updateArrows(precosRef, setShowPrecosLeft, setShowPrecosRight)} className="flex overflow-x-auto gap-3 pb-4 w-full [&::-webkit-scrollbar]:hidden snap-x snap-mandatory">
                       {precosFormatados.map((preco) => (
-                        <div key={preco.id} className="w-36 h-20 rounded-2xl border-[3px] bg-[#0d1117] flex flex-col items-center justify-center p-3 relative overflow-hidden transition-transform duration-300 hover:scale-105 shadow-lg flex-shrink-0 snap-center" style={{ borderColor: `${temaCor}40` }}>
-                          <div className="absolute inset-0 bg-white/5 pointer-events-none"></div>
-                          <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider mb-1 text-center z-10">{preco.titulo}</span>
-                          <span className="text-[17px] font-black text-white z-10 tracking-tight" style={{ color: temaCor }}>{preco.precoFinal}</span>
+                        <div
+                          key={preco.id}
+                          className="relative w-32 h-[72px] rounded-xl flex-shrink-0 snap-center transition-transform duration-300 hover:scale-105 bg-[#0d1117] shadow-lg flex flex-col items-center justify-center p-2 group"
+                          style={{
+                            border: `1.5px solid ${temaCor}40`,
+                            boxShadow: `0 4px 15px ${temaCor}15`
+                          }}
+                        >
+                          <div className="absolute inset-0 bg-white/[0.03] pointer-events-none rounded-xl"></div>
+                          
+                          <span className="relative z-10 text-[9px] font-black text-gray-400 uppercase tracking-widest text-center leading-tight mb-0.5">
+                            {preco.titulo}
+                          </span>
+                          
+                          <span
+                            className="relative z-10 text-base font-black tracking-tight"
+                            style={{
+                              color: temaCor,
+                              textShadow: `0 0 10px ${temaCor}40`,
+                            }}
+                          >
+                            {preco.precoFinal}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -636,8 +696,14 @@ export default function Catalogo() {
               )}
 
               <FadeInSection>
-                <div className="w-full rounded-3xl overflow-hidden border-[3px] transition-transform hover:scale-[1.02] active:scale-[0.98]" style={{ borderColor: `${temaCor}40` }}>
-                  <SmartImage src="/entrega_02.jpg" alt="Entrega Rápida" className="w-full h-auto block" />
+                <div className="relative w-full rounded-3xl transition-transform duration-500 hover:scale-[1.02] hover:-translate-y-1 shadow-lg group">
+                  <div className="w-full rounded-3xl overflow-hidden bg-[#0d1117] flex items-center justify-center">
+                    <SmartImage src="/entrega_02.jpg" alt="Entrega Rápida" className="w-full h-auto block" />
+                  </div>
+                  <div className="absolute inset-0 rounded-3xl border-[3px] pointer-events-none" style={{ borderColor: `${temaCor}40` }}></div>
+                  <div className="absolute inset-0 rounded-3xl pointer-events-none overflow-hidden" style={{ padding: '3px', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }}>
+                    <div className="absolute inset-[-100%] animate-spin-slow opacity-60 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `conic-gradient(from 0deg, transparent 75%, ${temaCor} 100%)` }}></div>
+                  </div>
                 </div>
               </FadeInSection>
           </div>
@@ -689,9 +755,16 @@ export default function Catalogo() {
             </div>
           ) : (
             <>
+              {/* FIFA */}
               <FadeInSection className="w-full px-2 mb-10">
-                <div className="w-full rounded-3xl overflow-hidden border-[3px] shadow-lg bg-[#0d1117] flex items-center justify-center relative" style={{ borderColor: `${temaCor}60` }}>
-                  <SmartImage src="/fifa.jpg" alt="FIFA Banner" className="w-full h-auto block scale-110 origin-center" />
+                <div className="relative w-full rounded-3xl transition-transform duration-500 hover:scale-[1.02] hover:-translate-y-1 shadow-lg group">
+                  <div className="w-full rounded-3xl overflow-hidden bg-[#0d1117] flex items-center justify-center">
+                    <SmartImage src="/fifa.jpg" alt="FIFA Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                  </div>
+                  <div className="absolute inset-0 rounded-3xl border-[3px] pointer-events-none" style={{ borderColor: `${temaCor}40` }}></div>
+                  <div className="absolute inset-0 rounded-3xl pointer-events-none overflow-hidden" style={{ padding: '3px', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }}>
+                    <div className="absolute inset-[-100%] animate-spin-slow opacity-60 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `conic-gradient(from 0deg, transparent 75%, ${temaCor} 100%)` }}></div>
+                  </div>
                 </div>
               </FadeInSection>
 
@@ -699,7 +772,9 @@ export default function Catalogo() {
               <FadeInSection className="w-full px-2">
                   <div className="flex items-center gap-2 mb-5">
                     <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">SELEÇÕES:</h3>
-                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                    <div className="h-[1px] flex-grow bg-white/5 relative overflow-hidden rounded-full">
+                      <div className="absolute inset-0 w-full animate-slide-line" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+                    </div>
                   </div>
                   <div className="relative flex items-center w-full">
                     {showSelLeft && (
@@ -726,15 +801,23 @@ export default function Catalogo() {
 
               {/* BRASILEIRÃO */}
               <FadeInSection className="w-full px-2 mb-12 mt-4">
-                <div className="w-full rounded-[2rem] overflow-hidden border-[3px] shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
-                  <SmartImage src="/brasileirao.png" alt="Brasileirão Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                <div className="relative w-full rounded-[2rem] transition-transform duration-500 hover:scale-[1.02] hover:-translate-y-1 shadow-2xl group">
+                  <div className="w-full rounded-[2rem] overflow-hidden bg-[#0d1117] flex items-center justify-center">
+                    <SmartImage src="/brasileirao.png" alt="Brasileirão Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                  </div>
+                  <div className="absolute inset-0 rounded-[2rem] border-[3px] pointer-events-none" style={{ borderColor: `${temaCor}40` }}></div>
+                  <div className="absolute inset-0 rounded-[2rem] pointer-events-none overflow-hidden" style={{ padding: '3px', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }}>
+                    <div className="absolute inset-[-100%] animate-spin-slow opacity-60 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `conic-gradient(from 0deg, transparent 75%, ${temaCor} 100%)` }}></div>
+                  </div>
                 </div>
               </FadeInSection>
 
               <FadeInSection className="w-full px-2">
                   <div className="flex items-center gap-3 mb-6">
                     <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">BRASILEIRÃO:</h3>
-                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                    <div className="h-[1px] flex-grow bg-white/5 relative overflow-hidden rounded-full">
+                      <div className="absolute inset-0 w-full animate-slide-line" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+                    </div>
                   </div>
                   <div className="relative flex items-center w-full">
                     {showBrasLeft && (
@@ -761,15 +844,23 @@ export default function Catalogo() {
 
               {/* LA LIGA */}
               <FadeInSection className="w-full px-2 mb-12 mt-4">
-                <div className="w-full rounded-[2rem] overflow-hidden border-[3px] shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
-                  <SmartImage src="/laliga.png" alt="La Liga Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                <div className="relative w-full rounded-[2rem] transition-transform duration-500 hover:scale-[1.02] hover:-translate-y-1 shadow-2xl group">
+                  <div className="w-full rounded-[2rem] overflow-hidden bg-[#0d1117] flex items-center justify-center">
+                    <SmartImage src="/laliga.png" alt="La Liga Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                  </div>
+                  <div className="absolute inset-0 rounded-[2rem] border-[3px] pointer-events-none" style={{ borderColor: `${temaCor}40` }}></div>
+                  <div className="absolute inset-0 rounded-[2rem] pointer-events-none overflow-hidden" style={{ padding: '3px', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }}>
+                    <div className="absolute inset-[-100%] animate-spin-slow opacity-60 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `conic-gradient(from 0deg, transparent 75%, ${temaCor} 100%)` }}></div>
+                  </div>
                 </div>
               </FadeInSection>
 
               <FadeInSection className="w-full px-2">
                   <div className="flex items-center gap-3 mb-6">
                     <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">LA LIGA:</h3>
-                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                    <div className="h-[1px] flex-grow bg-white/5 relative overflow-hidden rounded-full">
+                      <div className="absolute inset-0 w-full animate-slide-line" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+                    </div>
                   </div>
                   <div className="relative flex items-center w-full">
                     {showLaligaLeft && (
@@ -796,15 +887,23 @@ export default function Catalogo() {
 
               {/* PREMIER LEAGUE */}
               <FadeInSection className="w-full px-2 mb-12 mt-4">
-                <div className="w-full rounded-[2rem] overflow-hidden border-[3px] shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
-                  <SmartImage src="/premier-league.png" alt="Premier League Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                <div className="relative w-full rounded-[2rem] transition-transform duration-500 hover:scale-[1.02] hover:-translate-y-1 shadow-2xl group">
+                  <div className="w-full rounded-[2rem] overflow-hidden bg-[#0d1117] flex items-center justify-center">
+                    <SmartImage src="/premier-league.png" alt="Premier League Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                  </div>
+                  <div className="absolute inset-0 rounded-[2rem] border-[3px] pointer-events-none" style={{ borderColor: `${temaCor}40` }}></div>
+                  <div className="absolute inset-0 rounded-[2rem] pointer-events-none overflow-hidden" style={{ padding: '3px', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }}>
+                    <div className="absolute inset-[-100%] animate-spin-slow opacity-60 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `conic-gradient(from 0deg, transparent 75%, ${temaCor} 100%)` }}></div>
+                  </div>
                 </div>
               </FadeInSection>
 
               <FadeInSection className="w-full px-2 mb-8">
                   <div className="flex items-center gap-3 mb-6">
                     <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">PREMIER LEAGUE:</h3>
-                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                    <div className="h-[1px] flex-grow bg-white/5 relative overflow-hidden rounded-full">
+                      <div className="absolute inset-0 w-full animate-slide-line" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+                    </div>
                   </div>
                   <div className="relative flex items-center w-full">
                     {showPremierLeft && (
@@ -831,15 +930,23 @@ export default function Catalogo() {
 
               {/* SERIE A */}
               <FadeInSection className="w-full px-2 mb-12 mt-4">
-                <div className="w-full rounded-[2rem] overflow-hidden border-[3px] shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
-                  <SmartImage src="/serie-a.png" alt="Serie A Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                <div className="relative w-full rounded-[2rem] transition-transform duration-500 hover:scale-[1.02] hover:-translate-y-1 shadow-2xl group">
+                  <div className="w-full rounded-[2rem] overflow-hidden bg-[#0d1117] flex items-center justify-center">
+                    <SmartImage src="/serie-a.png" alt="Serie A Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                  </div>
+                  <div className="absolute inset-0 rounded-[2rem] border-[3px] pointer-events-none" style={{ borderColor: `${temaCor}40` }}></div>
+                  <div className="absolute inset-0 rounded-[2rem] pointer-events-none overflow-hidden" style={{ padding: '3px', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }}>
+                    <div className="absolute inset-[-100%] animate-spin-slow opacity-60 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `conic-gradient(from 0deg, transparent 75%, ${temaCor} 100%)` }}></div>
+                  </div>
                 </div>
               </FadeInSection>
 
               <FadeInSection className="w-full px-2 mb-8">
                   <div className="flex items-center gap-3 mb-6">
                     <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">SERIE A:</h3>
-                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                    <div className="h-[1px] flex-grow bg-white/5 relative overflow-hidden rounded-full">
+                      <div className="absolute inset-0 w-full animate-slide-line" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+                    </div>
                   </div>
                   <div className="relative flex items-center w-full">
                     {showSerieALeft && (
@@ -866,15 +973,23 @@ export default function Catalogo() {
 
               {/* LIGUE 1 */}
               <FadeInSection className="w-full px-2 mb-12 mt-4">
-                <div className="w-full rounded-[2rem] overflow-hidden border-[3px] shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
-                  <SmartImage src="/ligue-1.png" alt="Ligue 1 Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                <div className="relative w-full rounded-[2rem] transition-transform duration-500 hover:scale-[1.02] hover:-translate-y-1 shadow-2xl group">
+                  <div className="w-full rounded-[2rem] overflow-hidden bg-[#0d1117] flex items-center justify-center">
+                    <SmartImage src="/ligue-1.png" alt="Ligue 1 Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                  </div>
+                  <div className="absolute inset-0 rounded-[2rem] border-[3px] pointer-events-none" style={{ borderColor: `${temaCor}40` }}></div>
+                  <div className="absolute inset-0 rounded-[2rem] pointer-events-none overflow-hidden" style={{ padding: '3px', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }}>
+                    <div className="absolute inset-[-100%] animate-spin-slow opacity-60 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `conic-gradient(from 0deg, transparent 75%, ${temaCor} 100%)` }}></div>
+                  </div>
                 </div>
               </FadeInSection>
 
               <FadeInSection className="w-full px-2 mb-8">
                   <div className="flex items-center gap-3 mb-6">
                     <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">LIGUE 1:</h3>
-                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                    <div className="h-[1px] flex-grow bg-white/5 relative overflow-hidden rounded-full">
+                      <div className="absolute inset-0 w-full animate-slide-line" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+                    </div>
                   </div>
                   <div className="relative flex items-center w-full">
                     {showLigue1Left && (
@@ -901,15 +1016,23 @@ export default function Catalogo() {
 
               {/* BUNDESLIGA */}
               <FadeInSection className="w-full px-2 mb-12 mt-4">
-                <div className="w-full rounded-[2rem] overflow-hidden border-[3px] shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
-                  <SmartImage src="/bundesliga.png" alt="Bundesliga Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                <div className="relative w-full rounded-[2rem] transition-transform duration-500 hover:scale-[1.02] hover:-translate-y-1 shadow-2xl group">
+                  <div className="w-full rounded-[2rem] overflow-hidden bg-[#0d1117] flex items-center justify-center">
+                    <SmartImage src="/bundesliga.png" alt="Bundesliga Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                  </div>
+                  <div className="absolute inset-0 rounded-[2rem] border-[3px] pointer-events-none" style={{ borderColor: `${temaCor}40` }}></div>
+                  <div className="absolute inset-0 rounded-[2rem] pointer-events-none overflow-hidden" style={{ padding: '3px', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }}>
+                    <div className="absolute inset-[-100%] animate-spin-slow opacity-60 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `conic-gradient(from 0deg, transparent 75%, ${temaCor} 100%)` }}></div>
+                  </div>
                 </div>
               </FadeInSection>
 
               <FadeInSection className="w-full px-2 mb-8">
                   <div className="flex items-center gap-3 mb-6">
                     <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">BUNDESLIGA:</h3>
-                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                    <div className="h-[1px] flex-grow bg-white/5 relative overflow-hidden rounded-full">
+                      <div className="absolute inset-0 w-full animate-slide-line" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+                    </div>
                   </div>
                   <div className="relative flex items-center w-full">
                     {showBundesLeft && (
