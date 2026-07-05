@@ -202,11 +202,52 @@ const SERIEA_ITEMS = [
   { id: 428, img: "/PERUGIA.png", name: "PERUGIA", link: "https://photos.app.goo.gl/AyMe8NT53VJgRXCC6" },
 ];
 
+const LIGUE1_ITEMS = [
+  { id: 501, img: "/PSG.png", name: "PSG", link: "https://photos.app.goo.gl/pQV1F5xLvLZhGLdk6" },
+  { id: 502, img: "/OLYMPIQUE.png", name: "OLYMPIQUE", link: "https://photos.app.goo.gl/Mp1C498XrFh4wtMr6" },
+  { id: 503, img: "/LYON.png", name: "LYON", link: "https://photos.app.goo.gl/LDsKKKXqJZE9La2d8" },
+  { id: 504, img: "/MONACO.png", name: "MONACO", link: "https://photos.app.goo.gl/g2UfybLhdbpMUG9e9" },
+  { id: 505, img: "/LILLE.png", name: "LILLE", link: "https://photos.app.goo.gl/sBb3PWymrGHdruZt6" },
+  { id: 506, img: "/BORDEAUX.png", name: "BORDEAUX", link: "https://photos.app.goo.gl/nnxQZP7EhXw2YMKs5" },
+  { id: 507, img: "/RENNAIS.png", name: "RENNAIS", link: "https://photos.app.goo.gl/cEKNNPr4LzoEM8tj7" },
+  { id: 508, img: "/NICE.png", name: "NICE", link: "https://photos.app.goo.gl/nEbdiKcBCnLsJ9DX9" },
+  { id: 509, img: "/SAINT.png", name: "SAINT ÉTIENNE", link: "https://photos.app.goo.gl/ZEzcWCqbceMiwWYG8" },
+  { id: 510, img: "/LENS.png", name: "LENS", link: "https://photos.app.goo.gl/81pHWr4UzjXA5cmbA" },
+  { id: 511, img: "/NANTES.png", name: "NANTES", link: "https://photos.app.goo.gl/FPoHp4gW2QTEHH3i7" },
+  { id: 512, img: "/TOULOUSE.png", name: "TOULOUSE", link: "https://photos.app.goo.gl/dF5YCgKTq6gdutY96" },
+  { id: 513, img: "/STRASBOURG.png", name: "STRASBOURG", link: "https://photos.app.goo.gl/3HAfZESohLviykSH7" },
+  { id: 514, img: "/STADE.png", name: "STADE REIMS", link: "https://photos.app.goo.gl/bEJwYvysZDSc2omo9" },
+  { id: 515, img: "/LORIENT.png", name: "LORIENT", link: "https://photos.app.goo.gl/RNEEhgp3Zks5QMr36" },
+  { id: 516, img: "/METZ.png", name: "METZ", link: "https://photos.app.goo.gl/WThEYZz2K3ziMEV48" },
+];
+
+const BUNDESLIGA_ITEMS = [
+  { id: 601, img: "/BAYERN.png", name: "BAYERN", link: "https://photos.app.goo.gl/n8na827SNFQwvBQy5" },
+  { id: 602, img: "/BORUSSIA.png", name: "BORUSSIA", link: "https://photos.app.goo.gl/AuXdWJfGD4b7n7ZT9" },
+  { id: 603, img: "/LEVERKUSEN.png", name: "LEVERKUSEN", link: "https://photos.app.goo.gl/2jgrzFHnty9CusJx9" },
+  { id: 604, img: "/LEIPZIG.png", name: "RB LEIPZIG", link: "https://photos.app.goo.gl/iKxduNV5GvBntnfCA" },
+  { id: 605, img: "/FRANKFURT.png", name: "FRANKFURT", link: "https://photos.app.goo.gl/q7PD4yaTqqCAag2V6" },
+  { id: 606, img: "/STUTTGART.png", name: "STUTTGART", link: "https://photos.app.goo.gl/JTdeqdxrcjWZyZn57" },
+  { id: 607, img: "/WOLFSBURG.png", name: "WOLFSBURG", link: "https://photos.app.goo.gl/2JqD87o3iv6MLBxx8" },
+  { id: 608, img: "/MONCHEN.png", name: "MONCHEN", link: "https://photos.app.goo.gl/sPKrVnXab6PTHk4W9" },
+  { id: 609, img: "/SCHALKE.png", name: "SCHALKE 04", link: "https://photos.app.goo.gl/ZfcpZJdaJAiXnu8r7" },
+  { id: 610, img: "/WERDER.png", name: "WERDER BREMEN", link: "https://photos.app.goo.gl/3Q6JE5Qdet9jz5tW6" },
+  { id: 611, img: "/HAMBURGER -TCHECA.png", name: "HAMBURGER SV", link: "https://photos.app.goo.gl/Ko53rLqTRVXPJ1Ux6" },
+  { id: 612, img: "/HERTHA.png", name: "HERTHA BSC", link: "https://photos.app.goo.gl/L3Jp8fcdSjUyUH43A" },
+  { id: 613, img: "/KOLN.png", name: "FC. KOLN", link: "https://photos.app.goo.gl/pjsvtQMf4S9AAz6g7" },
+  { id: 614, img: "/HOFFENHEIM.png", name: "HOFFENHEIM", link: "https://photos.app.goo.gl/wpt6Tfw6AnTLvXc89" },
+  { id: 615, img: "/FREIBURG.png", name: "FREIBURG", link: "https://photos.app.goo.gl/Aqkkd4zUrFzVFfgu8" },
+  { id: 616, img: "/UNION.png", name: "FC. UNION", link: "https://photos.app.goo.gl/4MszJFf2a2XxyBDEA" },
+  { id: 617, img: "/AUGSBURG.png", name: "AUGSBURG", link: "https://photos.app.goo.gl/j6Psp8fhu5mj4HC37" },
+  { id: 618, img: "/HEIDENHEIM.png", name: "HEIDENHEIM", link: "https://photos.app.goo.gl/1aEwaHFxAz8Hqck59" },
+  { id: 619, img: "/FORTUNA.png", name: "FORTUNA", link: "https://photos.app.goo.gl/RCdxh3iAEd9BqcaE7" },
+  { id: 620, img: "/PAULI.png", name: "ST. PAULI", link: "https://photos.app.goo.gl/ahHb2k17fpEbpswi8" },
+];
+
 // ============================================================================
 // COMPONENTES OTIMIZADOS DE PERFORMANCE E UX
 // ============================================================================
 
-// 1. Imagem com Lazy Load e Skeleton Shimmer
 const SmartImage = memo(({ src, alt, className, eager = false }: any) => {
   const [loaded, setLoaded] = useState(false);
   return (
@@ -225,7 +266,6 @@ const SmartImage = memo(({ src, alt, className, eager = false }: any) => {
   );
 });
 
-// 2. Animação de Scroll CONTÍNUA
 const FadeInSection = memo(({ children, className = "", delay = 0 }: any) => {
   const [isVisible, setVisible] = useState(false);
   const domRef = useRef<HTMLDivElement>(null);
@@ -270,6 +310,8 @@ export default function Catalogo() {
   const laligaRef = useRef<HTMLDivElement>(null);
   const premierRef = useRef<HTMLDivElement>(null);
   const serieARef = useRef<HTMLDivElement>(null);
+  const ligue1Ref = useRef<HTMLDivElement>(null);
+  const bundesligaRef = useRef<HTMLDivElement>(null);
 
   const [showMenuLeft, setShowMenuLeft] = useState(false);
   const [showMenuRight, setShowMenuRight] = useState(true);
@@ -289,8 +331,14 @@ export default function Catalogo() {
   const [showSerieALeft, setShowSerieALeft] = useState(false);
   const [showSerieARight, setShowSerieARight] = useState(true);
 
-  // Busca Inteligente com Cache combinando todas as listas
-  const todosTimes = useMemo(() => [...SELECOES_ITEMS, ...BRASILEIRAO_ITEMS, ...LALIGA_ITEMS, ...PREMIER_ITEMS, ...SERIEA_ITEMS], []);
+  const [showLigue1Left, setShowLigue1Left] = useState(false);
+  const [showLigue1Right, setShowLigue1Right] = useState(true);
+
+  const [showBundesLeft, setShowBundesLeft] = useState(false);
+  const [showBundesRight, setShowBundesRight] = useState(true);
+
+  // Busca Inteligente
+  const todosTimes = useMemo(() => [...SELECOES_ITEMS, ...BRASILEIRAO_ITEMS, ...LALIGA_ITEMS, ...PREMIER_ITEMS, ...SERIEA_ITEMS, ...LIGUE1_ITEMS, ...BUNDESLIGA_ITEMS], []);
   const timesFiltrados = useMemo(() => {
     if (!termoPesquisa) return [];
     const pesquisaNormalizada = termoPesquisa.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -351,6 +399,8 @@ export default function Catalogo() {
       updateArrows(laligaRef, setShowLaligaLeft, setShowLaligaRight);
       updateArrows(premierRef, setShowPremierLeft, setShowPremierRight);
       updateArrows(serieARef, setShowSerieALeft, setShowSerieARight);
+      updateArrows(ligue1Ref, setShowLigue1Left, setShowLigue1Right);
+      updateArrows(bundesligaRef, setShowBundesLeft, setShowBundesRight);
     }
     const handleResize = () => {
       if (!isSearching) {
@@ -360,6 +410,8 @@ export default function Catalogo() {
         updateArrows(laligaRef, setShowLaligaLeft, setShowLaligaRight);
         updateArrows(premierRef, setShowPremierLeft, setShowPremierRight);
         updateArrows(serieARef, setShowSerieALeft, setShowSerieARight);
+        updateArrows(ligue1Ref, setShowLigue1Left, setShowLigue1Right);
+        updateArrows(bundesligaRef, setShowBundesLeft, setShowBundesRight);
       }
     };
     window.addEventListener('resize', handleResize);
@@ -494,7 +546,7 @@ export default function Catalogo() {
             </div>
           </FadeInSection>
 
-          {/* BANNERS GIGANTES SEPARADOS PARA EFEITO DE SCROLL INDIVIDUAL */}
+          {/* BANNERS GIGANTES */}
           <div className="w-full mb-8 px-2 flex flex-col gap-6">
               <FadeInSection>
                 <div className="flex items-center gap-3 mb-0">
@@ -639,41 +691,6 @@ export default function Catalogo() {
                   </div>
               </FadeInSection>
 
-              {/* LA LIGA */}
-              <FadeInSection className="w-full px-2 mb-12 mt-4">
-                <div className="w-full rounded-[2rem] overflow-hidden border shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
-                  <SmartImage src="/laliga.png" alt="La Liga Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
-                </div>
-              </FadeInSection>
-
-              <FadeInSection className="w-full px-2">
-                  <div className="flex items-center gap-3 mb-6">
-                    <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">LA LIGA:</h3>
-                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
-                  </div>
-                  <div className="relative flex items-center w-full">
-                    {showLaligaLeft && (
-                      <button onClick={() => scroll(laligaRef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronLeft className="w-5 h-5" /></button>
-                    )}
-                    <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden snap-x snap-mandatory min-h-[120px]" ref={laligaRef} onScroll={() => updateArrows(laligaRef, setShowLaligaLeft, setShowLaligaRight)}>
-                      {LALIGA_ITEMS.map((item) => {
-                        const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
-                        return (
-                          <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] snap-center group">
-                            <div className="w-20 h-20 rounded-full border-2 bg-white/5 backdrop-blur-sm flex items-center justify-center relative overflow-hidden transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-active:scale-95 shadow-lg" style={{ borderColor: temaCor }}>
-                              <SmartImage src={item.img} alt={item.name.replace('\n', ' ')} className="w-full h-full object-contain p-[10px] drop-shadow-md transition-transform duration-500 group-hover:scale-110" />
-                            </div>
-                            <span className="text-[9px] font-black uppercase text-center text-gray-400 group-hover:text-white transition-colors duration-300 whitespace-pre-line">{item.name}</span>
-                          </a>
-                        );
-                      })}
-                    </div>
-                    {showLaligaRight && (
-                      <button onClick={() => scroll(laligaRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronRight className="w-5 h-5" /></button>
-                    )}
-                  </div>
-              </FadeInSection>
-
               {/* PREMIER LEAGUE */}
               <FadeInSection className="w-full px-2 mb-12 mt-4">
                 <div className="w-full rounded-[2rem] overflow-hidden border shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
@@ -705,6 +722,41 @@ export default function Catalogo() {
                     </div>
                     {showPremierRight && (
                       <button onClick={() => scroll(premierRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronRight className="w-5 h-5" /></button>
+                    )}
+                  </div>
+              </FadeInSection>
+
+              {/* LA LIGA */}
+              <FadeInSection className="w-full px-2 mb-12 mt-4">
+                <div className="w-full rounded-[2rem] overflow-hidden border shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
+                  <SmartImage src="/laliga.png" alt="La Liga Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                </div>
+              </FadeInSection>
+
+              <FadeInSection className="w-full px-2">
+                  <div className="flex items-center gap-3 mb-6">
+                    <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">LA LIGA:</h3>
+                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                  </div>
+                  <div className="relative flex items-center w-full">
+                    {showLaligaLeft && (
+                      <button onClick={() => scroll(laligaRef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronLeft className="w-5 h-5" /></button>
+                    )}
+                    <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden snap-x snap-mandatory min-h-[120px]" ref={laligaRef} onScroll={() => updateArrows(laligaRef, setShowLaligaLeft, setShowLaligaRight)}>
+                      {LALIGA_ITEMS.map((item) => {
+                        const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
+                        return (
+                          <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] snap-center group">
+                            <div className="w-20 h-20 rounded-full border-2 bg-white/5 backdrop-blur-sm flex items-center justify-center relative overflow-hidden transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-active:scale-95 shadow-lg" style={{ borderColor: temaCor }}>
+                              <SmartImage src={item.img} alt={item.name.replace('\n', ' ')} className="w-full h-full object-contain p-[10px] drop-shadow-md transition-transform duration-500 group-hover:scale-110" />
+                            </div>
+                            <span className="text-[9px] font-black uppercase text-center text-gray-400 group-hover:text-white transition-colors duration-300 whitespace-pre-line">{item.name}</span>
+                          </a>
+                        );
+                      })}
+                    </div>
+                    {showLaligaRight && (
+                      <button onClick={() => scroll(laligaRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronRight className="w-5 h-5" /></button>
                     )}
                   </div>
               </FadeInSection>
@@ -743,6 +795,77 @@ export default function Catalogo() {
                     )}
                   </div>
               </FadeInSection>
+
+              {/* LIGUE 1 */}
+              <FadeInSection className="w-full px-2 mb-12 mt-4">
+                <div className="w-full rounded-[2rem] overflow-hidden border shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
+                  <SmartImage src="/ligue-1.png" alt="Ligue 1 Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                </div>
+              </FadeInSection>
+
+              <FadeInSection className="w-full px-2 mb-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">LIGUE 1:</h3>
+                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                  </div>
+                  <div className="relative flex items-center w-full">
+                    {showLigue1Left && (
+                      <button onClick={() => scroll(ligue1Ref, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronLeft className="w-5 h-5" /></button>
+                    )}
+                    <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden snap-x snap-mandatory min-h-[120px]" ref={ligue1Ref} onScroll={() => updateArrows(ligue1Ref, setShowLigue1Left, setShowLigue1Right)}>
+                      {LIGUE1_ITEMS.map((item) => {
+                        const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
+                        return (
+                          <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] snap-center group">
+                            <div className="w-20 h-20 rounded-full border-2 bg-white/5 backdrop-blur-sm flex items-center justify-center relative overflow-hidden transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-active:scale-95 shadow-lg" style={{ borderColor: temaCor }}>
+                              <SmartImage src={item.img} alt={item.name.replace('\n', ' ')} className="w-full h-full object-contain p-[10px] drop-shadow-md transition-transform duration-500 group-hover:scale-110" />
+                            </div>
+                            <span className="text-[9px] font-black uppercase text-center text-gray-400 group-hover:text-white transition-colors duration-300 whitespace-pre-line">{item.name}</span>
+                          </a>
+                        );
+                      })}
+                    </div>
+                    {showLigue1Right && (
+                      <button onClick={() => scroll(ligue1Ref, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronRight className="w-5 h-5" /></button>
+                    )}
+                  </div>
+              </FadeInSection>
+
+              {/* BUNDESLIGA */}
+              <FadeInSection className="w-full px-2 mb-12 mt-4">
+                <div className="w-full rounded-[2rem] overflow-hidden border shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
+                  <SmartImage src="/bundesliga.png" alt="Bundesliga Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                </div>
+              </FadeInSection>
+
+              <FadeInSection className="w-full px-2 mb-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">BUNDESLIGA:</h3>
+                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                  </div>
+                  <div className="relative flex items-center w-full">
+                    {showBundesLeft && (
+                      <button onClick={() => scroll(bundesligaRef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronLeft className="w-5 h-5" /></button>
+                    )}
+                    <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden snap-x snap-mandatory min-h-[120px]" ref={bundesligaRef} onScroll={() => updateArrows(bundesligaRef, setShowBundesLeft, setShowBundesRight)}>
+                      {BUNDESLIGA_ITEMS.map((item) => {
+                        const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
+                        return (
+                          <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] snap-center group">
+                            <div className="w-20 h-20 rounded-full border-2 bg-white/5 backdrop-blur-sm flex items-center justify-center relative overflow-hidden transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-active:scale-95 shadow-lg" style={{ borderColor: temaCor }}>
+                              <SmartImage src={item.img} alt={item.name.replace('\n', ' ')} className="w-full h-full object-contain p-[10px] drop-shadow-md transition-transform duration-500 group-hover:scale-110" />
+                            </div>
+                            <span className="text-[9px] font-black uppercase text-center text-gray-400 group-hover:text-white transition-colors duration-300 whitespace-pre-line">{item.name}</span>
+                          </a>
+                        );
+                      })}
+                    </div>
+                    {showBundesRight && (
+                      <button onClick={() => scroll(bundesligaRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronRight className="w-5 h-5" /></button>
+                    )}
+                  </div>
+              </FadeInSection>
+
             </>
           )}
         </div>
