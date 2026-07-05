@@ -15,7 +15,6 @@ const CATEGORIAS = [
   { id: 6, titulo: "MANGA LONGA", img: "/manga-longa.png", link: "https://photos.app.goo.gl/jWiGyHsfcfosweQ8A" },
 ];
 
-// REORDENADO POR IMPORTÂNCIA / POPULARIDADE
 const SELECOES_ITEMS = [
   { id: 9, img: "/BRASIL.png", name: "BRASIL", link: "https://photos.app.goo.gl/caB7TJKQgLvpZLwk6" },
   { id: 4, img: "/ARGENTINA.png", name: "ARGENTINA", link: "https://photos.app.goo.gl/eAmjsAuosWDhkDHd8" },
@@ -76,7 +75,6 @@ const SELECOES_ITEMS = [
   { id: 37, img: "/ISRAEL.png", name: "ISRAEL", link: "https://photos.app.goo.gl/crmyrK9C4P824HX36" },
 ];
 
-// REORDENADO POR IMPORTÂNCIA / POPULARIDADE
 const BRASILEIRAO_ITEMS = [
   { id: 117, img: "/flamengo.png", name: "FLAMENGO", link: "https://photos.app.goo.gl/o6PYEX5zpCA8eWS26" },
   { id: 111, img: "/corinthians.png", name: "CORINTHIANS", link: "https://photos.app.goo.gl/dfA69Y5DqQnp6tJZ9" },
@@ -112,7 +110,6 @@ const BRASILEIRAO_ITEMS = [
   { id: 115, img: "/csa.png", name: "CSA", link: "https://photos.app.goo.gl/aqUbKB3HGfit2fe98" }
 ];
 
-// REORDENADO POR IMPORTÂNCIA / POPULARIDADE
 const LALIGA_ITEMS = [
   { id: 213, img: "/REAL-MADRID.png", name: "REAL MADRID", link: "https://photos.app.goo.gl/PMh4koNb1JnPLzzT9" },
   { id: 205, img: "/BARCELONA.png", name: "BARCELONA", link: "https://photos.app.goo.gl/at6jweUQW7zcPuGN6" },
@@ -135,11 +132,81 @@ const LALIGA_ITEMS = [
   { id: 206, img: "/cadiz.png", name: "CADIZ C.F", link: "https://photos.app.goo.gl/7sJxjyEXXCkr6XYE8" },
 ];
 
+const PREMIER_ITEMS = [
+  { id: 301, img: "/man-united.png", name: "M. UNITED", link: "https://photos.app.goo.gl/J4r8PzookyQuonxz5" },
+  { id: 302, img: "/man-city.png", name: "M. CITY", link: "https://photos.app.goo.gl/iVKkEnCDSVBhGwrp6" },
+  { id: 303, img: "/arsenal.png", name: "ARSENAL", link: "https://photos.app.goo.gl/pP5xwip49sh577rN6" },
+  { id: 304, img: "/chelsea.png", name: "CHELSEA", link: "https://photos.app.goo.gl/ZKyqBd8kReuMU4kx5" },
+  { id: 305, img: "/liverpool.png", name: "LIVERPOOL", link: "https://photos.app.goo.gl/tKuz88BqjY8jjVhe8" },
+  { id: 306, img: "/spurs.png", name: "TOTTENHAM", link: "https://photos.app.goo.gl/XEuNUuHGEsEn4kGN6" },
+  { id: 307, img: "/newcastle.png", name: "NEWCASTLE", link: "https://photos.app.goo.gl/Zr6LAg5rN5wJUh8R9" },
+  { id: 308, img: "/aston-villa.png", name: "ASTON VILLA", link: "https://photos.app.goo.gl/m3c3yWEAnMCAP5Jr5" },
+  { id: 309, img: "/west-ham.png", name: "WEST HAM", link: "https://photos.app.goo.gl/cmhVwaKJz9b1rTYZ8" },
+  { id: 310, img: "/everton.png", name: "EVERTON", link: "https://photos.app.goo.gl/wagoc2YQ79JwoeSk9" },
+  { id: 311, img: "/leicester.png", name: "LEICESTER CITY", link: "https://photos.app.goo.gl/82LxKdzfqRRrhghq8" },
+  { id: 312, img: "/BRIGHTON.png", name: "BRIGHTON", link: "https://photos.app.goo.gl/8VDop5ngT331y8GE7" },
+  { id: 313, img: "/wolfs.png", name: "WOLVES", link: "https://photos.app.goo.gl/9qUFsgrbzPho7z2VA" },
+  { id: 314, img: "/crystal-palace.png", name: "CRYSTAL PALACE", link: "https://photos.app.goo.gl/wveqWVwb8ZBR6jas6" },
+  { id: 315, img: "/southampton.png", name: "SOUTHAMPTON", link: "https://photos.app.goo.gl/kA4FrRZfUfj5MZjq9" },
+  { id: 316, img: "/FOREST.png", name: "N. FOREST", link: "https://photos.app.goo.gl/3Azyo5ju3ZXkpcpf9" },
+  { id: 317, img: "/LEEDS.png", name: "LEEDS", link: "https://photos.app.goo.gl/vzuYb4ruA1w9DLYy8" },
+  { id: 318, img: "/FULHAM.png", name: "FULHAM", link: "https://photos.app.goo.gl/DUhbBAFcnude7hEs8" },
+  { id: 319, img: "/BURNLEY.png", name: "BURNLEY", link: "https://photos.app.goo.gl/7yHhmDeysziykcqt8" },
+  { id: 320, img: "/sunderland.png", name: "SUNDERLAND", link: "https://photos.app.goo.gl/3Ycr8AyezY989eYW6" },
+  { id: 321, img: "/sheffield.png", name: "SHEFFIELD UNITED", link: "https://photos.app.goo.gl/f11FvapNMcHGhrQz6" },
+  { id: 322, img: "/WATFORD.png", name: "WATFORD", link: "https://photos.app.goo.gl/HcA3Jw1aepSLccFT8" },
+  { id: 323, img: "/norwich.png", name: "NORWICH", link: "https://photos.app.goo.gl/EPxGZeabKjUmUVvg8" },
+  { id: 324, img: "/BROMWICH.png", name: "BROMWICH", link: "https://photos.app.goo.gl/swDfP7b6scL4Vd458" },
+  { id: 325, img: "/BLACKBURN.png", name: "BLACKBURN", link: "https://photos.app.goo.gl/5yud3HTkXqfUcPgC8" },
+  { id: 326, img: "/SWANSEA.png", name: "SWANSEA C.", link: "https://photos.app.goo.gl/TeW2nmKbWZBxynVK7" },
+  { id: 327, img: "/STOKE.png", name: "STOKE CITY", link: "https://photos.app.goo.gl/kpB9UpZEV8GAE8gFA" },
+  { id: 328, img: "/QUEENS.png", name: "QUEENS PARK", link: "https://photos.app.goo.gl/XoEkrtM4G5R46HRJ8" },
+  { id: 329, img: "/BIRMINGHAM.png", name: "BIRMINGHAM C.", link: "https://photos.app.goo.gl/SyPrUSjWLzNYCfAv5" },
+  { id: 330, img: "/HULL.png", name: "HULL CITY", link: "https://photos.app.goo.gl/rFAEXiWmEwQxMTUa7" },
+  { id: 331, img: "/CARDIFF.png", name: "CARDIFF CITY", link: "https://photos.app.goo.gl/DnZJ5yrzg7mQUwoa9" },
+  { id: 332, img: "/COVENTRY.png", name: "COVENTRY CITY", link: "https://photos.app.goo.gl/KiKn64byKBXCko5AA" },
+  { id: 333, img: "/IPSWICH.png", name: "IPSWICH TOWN", link: "https://photos.app.goo.gl/6xt81SXzjT41t2zj6" },
+  { id: 334, img: "/LUTON.png", name: "LUTON TOWN", link: "https://photos.app.goo.gl/KAdtjtbpgRQks3eF7" },
+  { id: 335, img: "/D-COUNTRY.png", name: "D. COUNTRY", link: "https://photos.app.goo.gl/zPnWZopDFcFUJNB8A" },
+  { id: 336, img: "/PLYMOUTH.png", name: "PLYMOUTH", link: "https://photos.app.goo.gl/RS2oGhjBfbHeygJZ6" }
+];
+
+const SERIEA_ITEMS = [
+  { id: 401, img: "/JUVENTUS.png", name: "JUVENTUS", link: "https://photos.app.goo.gl/x6LvSPLT3TPi3AbN6" },
+  { id: 402, img: "/MILAN.png", name: "MILAN", link: "https://photos.app.goo.gl/1umb2gkT8NnX4SFo9" },
+  { id: 403, img: "/INTER.png", name: "INTER", link: "https://photos.app.goo.gl/JYGNF8Y8Y859VMWaA" },
+  { id: 404, img: "/NAPOLI.png", name: "NAPOLI", link: "https://photos.app.goo.gl/QchoGtFf4UYaHNc57" },
+  { id: 405, img: "/ROMA.png", name: "ROMA", link: "https://photos.app.goo.gl/ZbczEwTJDLu1F2H18" },
+  { id: 406, img: "/LAZIO.png", name: "LAZIO", link: "https://photos.app.goo.gl/L5eXi3jhFvHn7nQXA" },
+  { id: 407, img: "/FIORENTINA.png", name: "FIORENTINA", link: "https://photos.app.goo.gl/4TiA5ehTiuMESMZT7" },
+  { id: 408, img: "/ATALANTA.png", name: "ATALANTA", link: "https://photos.app.goo.gl/zgZWtgVmHj5ap4PB9" },
+  { id: 409, img: "/TORINO.png", name: "TORINO", link: "https://photos.app.goo.gl/4UtwF2FkgY5RNuVZ7" },
+  { id: 410, img: "/SAMPDORIA.png", name: "SAMPDORIA", link: "https://photos.app.goo.gl/z9EmtkHXxrTnN3eX7" },
+  { id: 411, img: "/PARMA.png", name: "PARMA", link: "https://photos.app.goo.gl/YEY64kR9D1fXdTGTA" },
+  { id: 412, img: "/PALERMO.png", name: "PALERMO", link: "https://photos.app.goo.gl/jf9ASHTToNnkviH77" },
+  { id: 413, img: "/UDINESE.png", name: "UDINESE", link: "https://photos.app.goo.gl/N3UGwosi6daDqmeQ9" },
+  { id: 414, img: "/GENOA.png", name: "GENOA", link: "https://photos.app.goo.gl/fA6QpwrRcxnQsSD57" },
+  { id: 415, img: "/BOLOGNA.png", name: "BOLOGNA", link: "https://photos.app.goo.gl/ucnGRiNzGC8Q22xZ8" },
+  { id: 416, img: "/HELLAS.png", name: "HELLAS VERONA", link: "https://photos.app.goo.gl/NtsVQ66WwTJyGYYY9" },
+  { id: 417, img: "/SASSUOLO.png", name: "SASSUOLO", link: "https://photos.app.goo.gl/CHWvcm4RpqBJWGiU8" },
+  { id: 418, img: "/CAGLIARI.png", name: "CAGLIARI", link: "https://photos.app.goo.gl/41iEZvzo6NsQdorm6" },
+  { id: 419, img: "/VENEZIA.png", name: "VENEZIA", link: "https://photos.app.goo.gl/nHRgg3DneoyfRZMWA" },
+  { id: 420, img: "/EMPOLI.png", name: "EMPOLI", link: "https://photos.app.goo.gl/g6d4kNyVesEy9Xky9" },
+  { id: 421, img: "/LECCE.png", name: "LECCE", link: "https://photos.app.goo.gl/PK1XjUtSZSWhXyiJA" },
+  { id: 422, img: "/SALERNITANA.png", name: "SALERNITANA", link: "https://photos.app.goo.gl/2C5hxGQ9VomXAamSA" },
+  { id: 423, img: "/MONZA.png", name: "MONZA", link: "https://photos.app.goo.gl/zDoVm3sef65baiPG6" },
+  { id: 424, img: "/CREMONESE.png", name: "CREMONESE", link: "https://photos.app.goo.gl/2Y64A1GHEgrMZUGP6" },
+  { id: 425, img: "/FROSINONE-TCHECA.png", name: "FROSINONE", link: "https://photos.app.goo.gl/MebXdbdUdwYJz8bM6" },
+  { id: 426, img: "/BARI.png", name: "BARI", link: "https://photos.app.goo.gl/DuDVhV8kgyPvUWJA6" },
+  { id: 427, img: "/BRESCIA.png", name: "BRESCIA", link: "https://photos.app.goo.gl/xc3v459LumAkFbieA" },
+  { id: 428, img: "/PERUGIA.png", name: "PERUGIA", link: "https://photos.app.goo.gl/AyMe8NT53VJgRXCC6" },
+];
+
 // ============================================================================
 // COMPONENTES OTIMIZADOS DE PERFORMANCE E UX
 // ============================================================================
 
-// 1. Imagem com Lazy Load e Skeleton Shimmer (Transição mais rápida e responsiva)
+// 1. Imagem com Lazy Load e Skeleton Shimmer
 const SmartImage = memo(({ src, alt, className, eager = false }: any) => {
   const [loaded, setLoaded] = useState(false);
   return (
@@ -158,7 +225,7 @@ const SmartImage = memo(({ src, alt, className, eager = false }: any) => {
   );
 });
 
-// 2. Animação de Scroll CONTÍNUA (Sobe e Desce repetidamente)
+// 2. Animação de Scroll CONTÍNUA
 const FadeInSection = memo(({ children, className = "", delay = 0 }: any) => {
   const [isVisible, setVisible] = useState(false);
   const domRef = useRef<HTMLDivElement>(null);
@@ -166,7 +233,6 @@ const FadeInSection = memo(({ children, className = "", delay = 0 }: any) => {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        // Atualiza a visibilidade toda vez que cruza a tela (pra cima ou pra baixo)
         setVisible(entry.isIntersecting);
       });
     }, { rootMargin: '0px 0px -50px 0px' }); 
@@ -202,6 +268,8 @@ export default function Catalogo() {
   const selecoesRef = useRef<HTMLDivElement>(null);
   const brasileiraoRef = useRef<HTMLDivElement>(null);
   const laligaRef = useRef<HTMLDivElement>(null);
+  const premierRef = useRef<HTMLDivElement>(null);
+  const serieARef = useRef<HTMLDivElement>(null);
 
   const [showMenuLeft, setShowMenuLeft] = useState(false);
   const [showMenuRight, setShowMenuRight] = useState(true);
@@ -215,8 +283,14 @@ export default function Catalogo() {
   const [showLaligaLeft, setShowLaligaLeft] = useState(false);
   const [showLaligaRight, setShowLaligaRight] = useState(true);
 
+  const [showPremierLeft, setShowPremierLeft] = useState(false);
+  const [showPremierRight, setShowPremierRight] = useState(true);
+
+  const [showSerieALeft, setShowSerieALeft] = useState(false);
+  const [showSerieARight, setShowSerieARight] = useState(true);
+
   // Busca Inteligente com Cache combinando todas as listas
-  const todosTimes = useMemo(() => [...SELECOES_ITEMS, ...BRASILEIRAO_ITEMS, ...LALIGA_ITEMS], []);
+  const todosTimes = useMemo(() => [...SELECOES_ITEMS, ...BRASILEIRAO_ITEMS, ...LALIGA_ITEMS, ...PREMIER_ITEMS, ...SERIEA_ITEMS], []);
   const timesFiltrados = useMemo(() => {
     if (!termoPesquisa) return [];
     const pesquisaNormalizada = termoPesquisa.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -275,6 +349,8 @@ export default function Catalogo() {
       updateArrows(selecoesRef, setShowSelLeft, setShowSelRight);
       updateArrows(brasileiraoRef, setShowBrasLeft, setShowBrasRight);
       updateArrows(laligaRef, setShowLaligaLeft, setShowLaligaRight);
+      updateArrows(premierRef, setShowPremierLeft, setShowPremierRight);
+      updateArrows(serieARef, setShowSerieALeft, setShowSerieARight);
     }
     const handleResize = () => {
       if (!isSearching) {
@@ -282,6 +358,8 @@ export default function Catalogo() {
         updateArrows(selecoesRef, setShowSelLeft, setShowSelRight);
         updateArrows(brasileiraoRef, setShowBrasLeft, setShowBrasRight);
         updateArrows(laligaRef, setShowLaligaLeft, setShowLaligaRight);
+        updateArrows(premierRef, setShowPremierLeft, setShowPremierRight);
+        updateArrows(serieARef, setShowSerieALeft, setShowSerieARight);
       }
     };
     window.addEventListener('resize', handleResize);
@@ -321,7 +399,6 @@ export default function Catalogo() {
 
         <div className="w-full max-w-sm mx-auto flex flex-col items-center pt-10 px-4 pb-28">
           
-          {/* TOPO APARECE DIRETO, SEM DELAY (Above the fold) */}
           <div className="flex items-center gap-2.5 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full mb-8 shadow-[0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-500 hover:scale-105 animate-in fade-in slide-in-from-top-4 duration-700">
             <div className="w-2.5 h-2.5 bg-[#25D366] rounded-full animate-pulse shadow-[0_0_12px_2px_#25D366]"></div>
             <span className="text-xs font-black text-white tracking-[0.2em]">ONLINE</span>
@@ -381,10 +458,6 @@ export default function Catalogo() {
               <Truck className="w-5 h-5 flex-shrink-0" style={{ color: temaCor }} /> RASTREIE O SEU PEDIDO CLICANDO AQUI
             </a>
           </div>
-
-          {/* ======================================================= */}
-          {/* DAQUI PRA BAIXO O EFEITO MÁGICO DE SCROLL REVEAL ENTRA  */}
-          {/* ======================================================= */}
 
           <FadeInSection className="w-full mb-4 px-2">
             <div className="flex items-center gap-2 mb-5">
@@ -597,6 +670,76 @@ export default function Catalogo() {
                     </div>
                     {showLaligaRight && (
                       <button onClick={() => scroll(laligaRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronRight className="w-5 h-5" /></button>
+                    )}
+                  </div>
+              </FadeInSection>
+
+              {/* PREMIER LEAGUE */}
+              <FadeInSection className="w-full px-2 mb-12 mt-4">
+                <div className="w-full rounded-[2rem] overflow-hidden border shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
+                  <SmartImage src="/premier-league.png" alt="Premier League Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                </div>
+              </FadeInSection>
+
+              <FadeInSection className="w-full px-2 mb-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">PREMIER LEAGUE:</h3>
+                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                  </div>
+                  <div className="relative flex items-center w-full">
+                    {showPremierLeft && (
+                      <button onClick={() => scroll(premierRef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronLeft className="w-5 h-5" /></button>
+                    )}
+                    <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden snap-x snap-mandatory min-h-[120px]" ref={premierRef} onScroll={() => updateArrows(premierRef, setShowPremierLeft, setShowPremierRight)}>
+                      {PREMIER_ITEMS.map((item) => {
+                        const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
+                        return (
+                          <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] snap-center group">
+                            <div className="w-20 h-20 rounded-full border-2 bg-white/5 backdrop-blur-sm flex items-center justify-center relative overflow-hidden transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-active:scale-95 shadow-lg" style={{ borderColor: temaCor }}>
+                              <SmartImage src={item.img} alt={item.name.replace('\n', ' ')} className="w-full h-full object-contain p-[10px] drop-shadow-md transition-transform duration-500 group-hover:scale-110" />
+                            </div>
+                            <span className="text-[9px] font-black uppercase text-center text-gray-400 group-hover:text-white transition-colors duration-300 whitespace-pre-line">{item.name}</span>
+                          </a>
+                        );
+                      })}
+                    </div>
+                    {showPremierRight && (
+                      <button onClick={() => scroll(premierRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronRight className="w-5 h-5" /></button>
+                    )}
+                  </div>
+              </FadeInSection>
+
+              {/* SERIE A */}
+              <FadeInSection className="w-full px-2 mb-12 mt-4">
+                <div className="w-full rounded-[2rem] overflow-hidden border shadow-2xl bg-[#0d1117] flex items-center justify-center relative transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1" style={{ borderColor: `${temaCor}40` }}>
+                  <SmartImage src="/serie-a.png" alt="Serie A Banner" className="w-full h-auto block scale-110 origin-center transition-transform duration-700 hover:scale-125" />
+                </div>
+              </FadeInSection>
+
+              <FadeInSection className="w-full px-2 mb-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <h3 className="text-xs font-black tracking-widest text-white uppercase leading-[1.3]">SERIE A:</h3>
+                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                  </div>
+                  <div className="relative flex items-center w-full">
+                    {showSerieALeft && (
+                      <button onClick={() => scroll(serieARef, 'left')} className="absolute -left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronLeft className="w-5 h-5" /></button>
+                    )}
+                    <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden snap-x snap-mandatory min-h-[120px]" ref={serieARef} onScroll={() => updateArrows(serieARef, setShowSerieALeft, setShowSerieARight)}>
+                      {SERIEA_ITEMS.map((item) => {
+                        const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
+                        return (
+                          <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] snap-center group">
+                            <div className="w-20 h-20 rounded-full border-2 bg-white/5 backdrop-blur-sm flex items-center justify-center relative overflow-hidden transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-active:scale-95 shadow-lg" style={{ borderColor: temaCor }}>
+                              <SmartImage src={item.img} alt={item.name.replace('\n', ' ')} className="w-full h-full object-contain p-[10px] drop-shadow-md transition-transform duration-500 group-hover:scale-110" />
+                            </div>
+                            <span className="text-[9px] font-black uppercase text-center text-gray-400 group-hover:text-white transition-colors duration-300 whitespace-pre-line">{item.name}</span>
+                          </a>
+                        );
+                      })}
+                    </div>
+                    {showSerieARight && (
+                      <button onClick={() => scroll(serieARef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/80 border border-white/10 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer hover:bg-white/20 hover:scale-110 active:scale-95"><ChevronRight className="w-5 h-5" /></button>
                     )}
                   </div>
               </FadeInSection>
