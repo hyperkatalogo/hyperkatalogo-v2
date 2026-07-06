@@ -245,14 +245,14 @@ const BUNDESLIGA_ITEMS = [
 ];
 
 // ============================================================================
-// COMPONENTES OTIMIZADOS DE PERFORMANCE E UX
+// COMPONENTES OTIMIZADOS DE PERFORMANCE E UX (FIX iOS)
 // ============================================================================
 
 const SmartImage = memo(({ src, alt, className, eager = false }: any) => {
   const [loaded, setLoaded] = useState(false);
   return (
     <>
-      {!loaded && <div className={`absolute inset-0 bg-white/10 animate-pulse z-0 rounded-inherit`} />}
+      {!loaded && <div className={`absolute inset-0 bg-white/10 animate-pulse z-0`} style={{ borderRadius: 'inherit' }} />}
       <img
         src={src}
         alt={alt}
@@ -271,6 +271,12 @@ const FadeInSection = memo(({ children, className = "", delay = 0 }: any) => {
   const domRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // FIX: Previne erro fatal em iPhones que não suportam o IntersectionObserver
+    if (typeof window === 'undefined' || !window.IntersectionObserver) {
+      setVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         setVisible(entry.isIntersecting);
@@ -370,7 +376,8 @@ export default function Catalogo() {
       { id: 'personalizacao', titulo: "PERSONALIZAÇÃO", valor: p.personalizacao },
     ];
     
-    return lista.filter(item => item.valor && item.valor.trim() !== '').map(item => ({
+    // FIX: O String() garante que mesmo que o iOS jogue um número para o banco, ele vira texto antes do trim(), evitando o crash.
+    return lista.filter(item => item.valor != null && String(item.valor).trim() !== '').map(item => ({
       ...item,
       precoFinal: `${m} ${item.valor}`
     }));
@@ -468,15 +475,15 @@ export default function Catalogo() {
     </div>
   );
 
-  const whatsAppNumber = catalogo?.whatsapp?.replace(/\D/g, '') || '556793053894';
+  // FIX: O String() previne colapso na API de Regex caso o BD envie null/numero para o iPhone
+  const whatsAppNumber = catalogo?.whatsapp ? String(catalogo.whatsapp).replace(/\D/g, '') : '556793053894';
   const whatsAppLink = `https://wa.me/${whatsAppNumber}`;
   const temaCor = catalogo?.theme_color || '#007AFF';
 
   return (
     <>
+      {/* FIX: A linha @import da fonte foi removida daqui, pois a injeção em tempo real quebrava o CSSOM do Safari. */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
-        
         /* Animação suave para as linhas de separação dos títulos */
         @keyframes slide-line {
           0% { transform: translateX(-100%); }

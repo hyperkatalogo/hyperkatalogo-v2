@@ -8,9 +8,11 @@ import Dashboard from './pages/Dashboard.tsx'
 import Formulario from './pages/Formulario.tsx'
 import IntroducaoCatalogo from './pages/IntroducaoCatálogo.tsx'
 import Catalogo from './pages/Catalogo'
-
-// 1. IMPORTAÇÃO DA NOVA PÁGINA AQUI
 import EditarCatalogo from './pages/EditarCatalogo.tsx'
+import GerenciarCatalogos from './pages/GerenciarCatalogos.tsx'
+
+// 1. IMPORTAÇÃO DA PÁGINA ADMIN
+import AdminLayout from './pages/AdminLayout.tsx'
 
 import './index.css'
 
@@ -25,9 +27,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/catalogo-intro" element={<IntroducaoCatalogo />} />
         <Route path="/formulario" element={<Formulario />} />
         <Route path="/catalogo/:id" element={<Catalogo />} />
-        
-        {/* 2. A ROTA DE EDIÇÃO LIGADA AQUI */}
         <Route path="/editar/:id" element={<EditarCatalogo />} />
+        <Route path="/admin/catalogos" element={<GerenciarCatalogos />} />
+
+        {/* 2. A ROTA DO PAINEL ADMINISTRATIVO */}
+        <Route path="/admin/*" element={<AdminLayout />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import Formulario from './pages/Formulario';
 import Catalogo from './pages/Catalogo';
 import EditarCatalogo from './pages/EditarCatalogo';
+import AdminLayout from './pages/AdminLayout'; // Importação do painel Admin
 
 export default function App() {
   return (
@@ -15,7 +16,14 @@ export default function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/formulario" element={<Formulario />} />
       <Route path="/editar/:id" element={<EditarCatalogo />} />
+      
+      {/* 1. ROTA EXCLUSIVA DO SUPER ADMIN */}
+      <Route path="/admin" element={<AdminLayout />} />
+      <Route path="/admin/*" element={<AdminLayout />} />
+
+      {/* 2. ROTA DOS CATÁLOGOS DOS CLIENTES */}
       <Route path="/catalogo/:id" element={<Catalogo />} />
+      
       <Route path="*" element={<Login />} />
     </Routes>
   );
