@@ -265,6 +265,46 @@ const SmartImage = memo(({ src, alt, className, eager = false }: any) => {
 });
 
 // ============================================================================
+// COMPONENTE: FADE IN SECTION (SISTEMA ULTRA SEGURO PARA iOS)
+// ============================================================================
+const FadeInSection = memo(({ children, className = "" }: any) => {
+  const [isVisible, setVisible] = useState(false);
+  const domRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // FALLBACK RIGOROSO: Se o motor Safari do iOS não tiver suporte ou der erro, o conteúdo aparece direto.
+    if (typeof window === 'undefined' || !window.IntersectionObserver) {
+      setVisible(true);
+      return;
+    }
+
+    try {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+          }
+        });
+      }, { rootMargin: '0px 0px -40px 0px' }); 
+
+      if (domRef.current) observer.observe(domRef.current);
+      return () => observer.disconnect();
+    } catch (e) {
+      setVisible(true);
+    }
+  }, []);
+
+  return (
+    <div 
+      ref={domRef} 
+      className={`${className} transition-all duration-[700ms] ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} 
+    >
+      {children}
+    </div>
+  );
+});
+
+// ============================================================================
 // COMPONENTE PRINCIPAL
 // ============================================================================
 export default function Catalogo() {
@@ -411,7 +451,7 @@ export default function Catalogo() {
 
   if (loading) return (
     <div className="min-h-screen w-full bg-[#050505] flex flex-col items-center justify-center pt-12 px-4 pb-28 text-white">
-      <p className="animate-pulse font-bold tracking-widest text-sm">CARREGANDO CATÁLOGO...</p>
+      <p className="font-bold tracking-widest text-sm">CARREGANDO CATÁLOGO...</p>
     </div>
   );
 
@@ -420,7 +460,7 @@ export default function Catalogo() {
   const temaCor = catalogo?.theme_color || '#007AFF';
 
   return (
-    <div className="min-h-screen w-full bg-[#050505] text-white pt-10 px-4 pb-28" style={{ fontFamily: "sans-serif" }}>
+    <div className="min-h-screen w-full bg-[#050505] text-white pt-10 px-4 pb-28" style={{ fontFamily: "'Montserrat', sans-serif" }}>
       <div className="w-full max-w-sm mx-auto flex flex-col items-center">
         
         {/* CABEÇALHO */}
@@ -484,7 +524,7 @@ export default function Catalogo() {
         </div>
 
         {/* MENU RÁPIDO */}
-        <div className="w-full mb-4 px-2">
+        <FadeInSection className="w-full mb-4 px-2">
           <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">MENU RÁPIDO:</h3>
           <div className="relative flex items-center w-full">
             {showMenuLeft && (
@@ -504,29 +544,35 @@ export default function Catalogo() {
               <button onClick={() => scroll(menuRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
             )}
           </div>
-        </div>
+        </FadeInSection>
 
-        {/* BANNERS COM SOMBRAS ELEGANTES */}
+        {/* BANNERS */}
         <div className="w-full mb-8 px-2 flex flex-col gap-6">
-          <h3 className="text-xs font-black text-white uppercase tracking-widest">CATEGORIAS EM DESTAQUE:</h3>
+          <FadeInSection>
+            <h3 className="text-xs font-black text-white uppercase tracking-widest">CATEGORIAS EM DESTAQUE:</h3>
+          </FadeInSection>
           
-          <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="relative w-full rounded-3xl p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-            <div className="absolute inset-0 z-0 rounded-3xl opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
-            <div className="relative w-full h-full rounded-[21px] overflow-hidden bg-[#0d1117] z-10">
-              <SmartImage src="/corta-vento.jpg" eager={true} />
-            </div>
-          </a>
+          <FadeInSection>
+            <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="relative w-full rounded-3xl p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+              <div className="absolute inset-0 z-0 rounded-3xl opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
+              <div className="relative w-full h-full rounded-[21px] overflow-hidden bg-[#0d1117] z-10">
+                <SmartImage src="/corta-vento.jpg" eager={true} />
+              </div>
+            </a>
+          </FadeInSection>
 
-          <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="relative w-full rounded-3xl p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-            <div className="absolute inset-0 z-0 rounded-3xl opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
-            <div className="relative w-full h-full rounded-[21px] overflow-hidden bg-[#0d1117] z-10">
-              <SmartImage src="/retro.jpg" />
-            </div>
-          </a>
+          <FadeInSection>
+            <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="relative w-full rounded-3xl p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+              <div className="absolute inset-0 z-0 rounded-3xl opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
+              <div className="relative w-full h-full rounded-[21px] overflow-hidden bg-[#0d1117] z-10">
+                <SmartImage src="/retro.jpg" />
+              </div>
+            </a>
+          </FadeInSection>
 
           {/* PREÇOS DINÂMICOS */}
           {precosFormatados.length > 0 && (
-            <div className="w-full mt-2 mb-2">
+            <FadeInSection className="w-full mt-2 mb-2">
               <h3 className="text-xs font-black text-white uppercase mb-4 tracking-widest">TABELA DE PREÇOS:</h3>
               <div className="relative flex items-center w-full">
                 {showPrecosLeft && (
@@ -544,25 +590,27 @@ export default function Catalogo() {
                   <button onClick={() => scroll(precosRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
-            </div>
+            </FadeInSection>
           )}
 
-          <div className="relative w-full rounded-3xl p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-            <div className="absolute inset-0 z-0 rounded-3xl opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
-            <div className="relative w-full h-full rounded-[21px] overflow-hidden bg-[#0d1117] z-10">
-              <SmartImage src="/entrega_02.jpg" alt="Entrega Rápida" />
+          <FadeInSection>
+            <div className="relative w-full rounded-3xl p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+              <div className="absolute inset-0 z-0 rounded-3xl opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
+              <div className="relative w-full h-full rounded-[21px] overflow-hidden bg-[#0d1117] z-10">
+                <SmartImage src="/entrega_02.jpg" alt="Entrega Rápida" />
+              </div>
             </div>
-          </div>
+          </FadeInSection>
         </div>
 
         {/* CAMPO DE BUSCA */}
-        <div className="w-full mb-6 px-2">
+        <FadeInSection className="w-full mb-6 px-2">
           <div className="flex items-center w-full h-14 rounded-2xl bg-[#111] border-[3px] transition-colors shadow-md" style={{ borderColor: isSearching ? temaCor : '#333' }}>
             <div className="pl-4 pr-3 text-gray-400"><Search className="w-5 h-5" /></div>
             <input type="text" placeholder="Buscar time ou seleção..." value={termoPesquisa} onChange={(e) => setTermoPesquisa(e.target.value)} className="flex-grow h-full bg-transparent text-white text-[13px] outline-none" />
             {isSearching && <button onClick={() => setTermoPesquisa('')} className="pr-4 text-gray-500 hover:text-white"><X size={20} /></button>}
           </div>
-        </div>
+        </FadeInSection>
 
         {isSearching ? (
           <div className="w-full px-2">
@@ -587,14 +635,14 @@ export default function Catalogo() {
           </div>
         ) : (
           <>
-            <div className="w-full px-2 mb-10">
+            <FadeInSection className="w-full px-2 mb-10">
               <div className="w-full rounded-3xl overflow-hidden border-[3px] bg-[#111] shadow-lg transition-transform hover:scale-[1.02]" style={{ borderColor: `${temaCor}60` }}>
                 <SmartImage src="/fifa.jpg" alt="FIFA Banner" />
               </div>
-            </div>
+            </FadeInSection>
 
             {/* SELEÇÕES */}
-            <div className="w-full px-2 mb-8">
+            <FadeInSection className="w-full px-2 mb-8">
               <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">SELEÇÕES:</h3>
               <div className="relative flex items-center w-full">
                 {showSelLeft && (
@@ -617,19 +665,19 @@ export default function Catalogo() {
                   <button onClick={() => scroll(selecoesRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
-            </div>
+            </FadeInSection>
 
             {/* BRASILEIRÃO */}
-            <div className="w-full px-2 mb-12">
+            <FadeInSection className="w-full px-2 mb-12">
               <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
                 <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
                   <SmartImage src="/brasileirao.png" alt="Brasileirão Banner" />
                 </div>
               </div>
-            </div>
+            </FadeInSection>
 
-            <div className="w-full px-2 mb-8">
+            <FadeInSection className="w-full px-2 mb-8">
               <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">BRASILEIRÃO:</h3>
               <div className="relative flex items-center w-full">
                 {showBrasLeft && (
@@ -652,19 +700,19 @@ export default function Catalogo() {
                   <button onClick={() => scroll(brasileiraoRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
-            </div>
+            </FadeInSection>
 
             {/* LA LIGA */}
-            <div className="w-full px-2 mb-12">
+            <FadeInSection className="w-full px-2 mb-12">
               <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
                 <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
                   <SmartImage src="/laliga.png" alt="La Liga Banner" />
                 </div>
               </div>
-            </div>
+            </FadeInSection>
 
-            <div className="w-full px-2 mb-8">
+            <FadeInSection className="w-full px-2 mb-8">
               <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">LA LIGA:</h3>
               <div className="relative flex items-center w-full">
                 {showLaligaLeft && (
@@ -684,22 +732,22 @@ export default function Catalogo() {
                   })}
                 </div>
                 {showLaligaRight && (
-                  <button onClick={() => scroll(laligaRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(laligaRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
-            </div>
+            </FadeInSection>
 
             {/* PREMIER LEAGUE */}
-            <div className="w-full px-2 mb-12">
+            <FadeInSection className="w-full px-2 mb-12">
               <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
                 <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
                   <SmartImage src="/premier-league.png" alt="Premier League Banner" />
                 </div>
               </div>
-            </div>
+            </FadeInSection>
 
-            <div className="w-full px-2 mb-8">
+            <FadeInSection className="w-full px-2 mb-8">
               <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">PREMIER LEAGUE:</h3>
               <div className="relative flex items-center w-full">
                 {showPremierLeft && (
@@ -719,22 +767,22 @@ export default function Catalogo() {
                   })}
                 </div>
                 {showPremierRight && (
-                  <button onClick={() => scroll(premierRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(premierRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
-            </div>
+            </FadeInSection>
 
             {/* SERIE A */}
-            <div className="w-full px-2 mb-12">
+            <FadeInSection className="w-full px-2 mb-12">
               <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
                 <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
                   <SmartImage src="/serie-a.png" alt="Serie A Banner" />
                 </div>
               </div>
-            </div>
+            </FadeInSection>
 
-            <div className="w-full px-2 mb-8">
+            <FadeInSection className="w-full px-2 mb-8">
               <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">SERIE A:</h3>
               <div className="relative flex items-center w-full">
                 {showSerieALeft && (
@@ -754,22 +802,22 @@ export default function Catalogo() {
                   })}
                 </div>
                 {showSerieARight && (
-                  <button onClick={() => scroll(serieARef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(serieARef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
-            </div>
+            </FadeInSection>
 
             {/* LIGUE 1 */}
-            <div className="w-full px-2 mb-12">
+            <FadeInSection className="w-full px-2 mb-12">
               <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
                 <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
                   <SmartImage src="/ligue-1.png" alt="Ligue 1 Banner" />
                 </div>
               </div>
-            </div>
+            </FadeInSection>
 
-            <div className="w-full px-2 mb-8">
+            <FadeInSection className="w-full px-2 mb-8">
               <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">LIGUE 1:</h3>
               <div className="relative flex items-center w-full">
                 {showLigue1Left && (
@@ -789,22 +837,22 @@ export default function Catalogo() {
                   })}
                 </div>
                 {showLigue1Right && (
-                  <button onClick={() => scroll(ligue1Ref, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(ligue1Ref, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
-            </div>
+            </FadeInSection>
 
             {/* BUNDESLIGA */}
-            <div className="w-full px-2 mb-12">
+            <FadeInSection className="w-full px-2 mb-12">
               <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
                 <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
                   <SmartImage src="/bundesliga.png" alt="Bundesliga Banner" />
                 </div>
               </div>
-            </div>
+            </FadeInSection>
 
-            <div className="w-full px-2 mb-8">
+            <FadeInSection className="w-full px-2 mb-8">
               <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">BUNDESLIGA:</h3>
               <div className="relative flex items-center w-full">
                 {showBundesLeft && (
@@ -824,20 +872,20 @@ export default function Catalogo() {
                   })}
                 </div>
                 {showBundesRight && (
-                  <button onClick={() => scroll(bundesligaRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(bundesligaRef, 'right')} className="absolute -right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
-            </div>
+            </FadeInSection>
 
           </>
         )}
 
         {/* BANNER SUPORTE */}
-        <div className="w-full px-2 -mt-4 mb-4">
+        <FadeInSection className="w-full px-2 -mt-10 mb-4">
           <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-full rounded-[2rem] overflow-hidden block transition-transform hover:scale-[1.02] shadow-2xl">
             <SmartImage src="/SUPORTE.png" alt="Suporte" />
           </a>
-        </div>
+        </FadeInSection>
 
       </div>
 
