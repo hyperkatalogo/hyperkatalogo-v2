@@ -1,10 +1,10 @@
-import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
+import { useRef, useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { Shirt, Truck, ChevronLeft, ChevronRight, Search, MousePointerClick, X } from "lucide-react";
 import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
 // ============================================================================
-// DADOS ESTÁTICOS COMPLETOS
+// DADOS ESTÁTICOS 
 // ============================================================================
 const CATEGORIAS = [
   { id: 1, titulo: "KIT DE ABRIGO", img: "/kit-de-abrigo.png", link: "https://photos.app.goo.gl/AcVbrSbL4imDJSgD8" },
@@ -244,6 +244,29 @@ const BUNDESLIGA_ITEMS = [
   { id: 620, img: "/PAULI.png", name: "ST. PAULI", link: "https://photos.app.goo.gl/ahHb2k17fpEbpswi8" },
 ];
 
+// ============================================================================
+// COMPONENTE OTIMIZADO: SMART IMAGE (LAZY LOAD SEGURO)
+// ============================================================================
+const SmartImage = memo(({ src, alt, className, eager = false }: any) => {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <div className={`relative ${className}`}>
+      {!loaded && <div className="absolute inset-0 bg-[#111] animate-pulse" style={{ borderRadius: 'inherit' }} />}
+      <img
+        src={src}
+        alt={alt}
+        loading={eager ? "eager" : "lazy"}
+        onLoad={() => setLoaded(true)}
+        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+        className={`w-full h-full object-cover transition-opacity duration-300 relative z-10 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+      />
+    </div>
+  );
+});
+
+// ============================================================================
+// COMPONENTE PRINCIPAL
+// ============================================================================
 export default function Catalogo() {
   const { id } = useParams(); 
   const [catalogo, setCatalogo] = useState<any>(null);
@@ -308,7 +331,7 @@ export default function Catalogo() {
       { id: 'personalizacao', titulo: "PERSONALIZAÇÃO", valor: p.personalizacao },
     ];
     
-    return lista.filter(item => item.valor && item.valor.trim() !== '').map(item => ({
+    return lista.filter(item => item.valor && String(item.valor).trim() !== '').map(item => ({
       ...item,
       precoFinal: `${m} ${item.valor}`
     }));
@@ -335,6 +358,13 @@ export default function Catalogo() {
   useEffect(() => {
     if (catalogo) {
       document.title = catalogo.store_name || 'HyperKatalogo';
+      let favicon = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+      if (!favicon) {
+        favicon = document.createElement("link");
+        favicon.rel = "icon";
+        document.head.appendChild(favicon);
+      }
+      favicon.href = catalogo.logo_url || '/logo.jpg';
     }
   }, [catalogo]);
 
@@ -381,11 +411,11 @@ export default function Catalogo() {
 
   if (loading) return (
     <div className="min-h-screen w-full bg-[#050505] flex flex-col items-center justify-center pt-12 px-4 pb-28 text-white">
-      <p>Carregando catálogo...</p>
+      <p className="animate-pulse font-bold tracking-widest text-sm">CARREGANDO CATÁLOGO...</p>
     </div>
   );
 
-  const whatsAppNumber = catalogo?.whatsapp?.replace(/\D/g, '') || '556793053894';
+  const whatsAppNumber = catalogo?.whatsapp ? String(catalogo.whatsapp).replace(/\D/g, '') : '556793053894';
   const whatsAppLink = `https://wa.me/${whatsAppNumber}`;
   const temaCor = catalogo?.theme_color || '#007AFF';
 
@@ -394,38 +424,38 @@ export default function Catalogo() {
       <div className="w-full max-w-sm mx-auto flex flex-col items-center">
         
         {/* CABEÇALHO */}
-        <div className="flex items-center gap-2.5 bg-[#111] border border-[#333] px-4 py-2 rounded-full mb-8">
-          <div className="w-2.5 h-2.5 bg-[#25D366] rounded-full"></div>
-          <span className="text-xs font-black">ONLINE</span>
+        <div className="flex items-center gap-2.5 bg-[#111] border border-[#333] px-4 py-2 rounded-full mb-8 shadow-lg">
+          <div className="w-2.5 h-2.5 bg-[#25D366] rounded-full animate-pulse shadow-[0_0_8px_#25D366]"></div>
+          <span className="text-xs font-black tracking-widest">ONLINE</span>
         </div>
         
-        <h2 className="text-[10px] font-bold text-gray-400 mb-5 uppercase">Catálogo Oficial</h2>
+        <h2 className="text-[10px] font-bold text-gray-400 mb-5 uppercase tracking-widest">Catálogo Oficial</h2>
 
-        <div className="w-28 h-28 rounded-full border-[3px] bg-black p-1 flex items-center justify-center overflow-hidden mb-6" style={{ borderColor: temaCor }}>
-          <img src={catalogo?.logo_url || "/logo.jpg"} alt="Logo" className="w-full h-full object-cover" />
+        <div className="w-28 h-28 rounded-full border-[3px] bg-black p-1 flex items-center justify-center overflow-hidden mb-6 shadow-xl transition-transform hover:scale-105" style={{ borderColor: temaCor, boxShadow: `0 0 30px ${temaCor}40` }}>
+          <SmartImage src={catalogo?.logo_url || "/logo.jpg"} alt="Logo" eager={true} className="rounded-full" />
         </div>
         
-        <h1 className="text-[28px] font-black uppercase text-center mb-10">{catalogo?.store_name || "HYPERKATÁLOGO"}</h1>
+        <h1 className="text-[28px] font-black uppercase text-center mb-10 tracking-tight">{catalogo?.store_name || "HYPERKATÁLOGO"}</h1>
 
-        <div className="flex items-center gap-2 mb-10 bg-[#111] px-5 py-2.5 rounded-full border border-[#333]">
+        <div className="flex items-center gap-2 mb-10 bg-[#111] px-5 py-2.5 rounded-full border border-[#333] shadow-md transition-transform hover:scale-105">
           <MousePointerClick size={16} style={{ color: temaCor }} />
-          <span className="text-[10px] font-black text-gray-200 uppercase">Clique para interagir com a página</span>
+          <span className="text-[10px] font-black text-gray-200 uppercase">Clique para interagir</span>
         </div>
 
         {/* REDES SOCIAIS */}
-        <h3 className="text-[11px] font-black text-white uppercase mb-5">FALE CONOSCO:</h3>
+        <h3 className="text-[11px] font-black text-white uppercase mb-5 tracking-widest">FALE CONOSCO:</h3>
         <div className="flex items-start justify-center gap-6 mb-10">
           {catalogo?.instagram && (
-            <div className="flex flex-col items-center gap-2.5">
-              <a href={catalogo.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#dc2743] flex items-center justify-center text-white">
+            <div className="flex flex-col items-center gap-2.5 group">
+              <a href={catalogo.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-lg">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
               </a>
               <span className="text-[9px] font-bold text-gray-400 uppercase">Instagram</span>
             </div>
           )}
           
-          <div className="flex flex-col items-center gap-2.5">
-            <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center text-white">
+          <div className="flex flex-col items-center gap-2.5 group">
+            <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-lg">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
               </svg>
@@ -434,8 +464,8 @@ export default function Catalogo() {
           </div>
 
           {catalogo?.tiktok && (
-            <div className="flex flex-col items-center gap-2.5">
-              <a href={catalogo.tiktok} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#111] flex items-center justify-center text-white">
+            <div className="flex flex-col items-center gap-2.5 group">
+              <a href={catalogo.tiktok} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#111] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-lg">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
               </a>
               <span className="text-[9px] font-bold text-gray-400 uppercase">TikTok</span>
@@ -445,97 +475,108 @@ export default function Catalogo() {
 
         {/* BOTÕES EXTRAS */}
         <div className="w-full flex flex-col gap-4 px-2 mb-12">
-          <a href="https://drive.google.com/drive/folders/1huxHu6yQruZTX-2E0vQTMHyW68tFnrsF?usp=share_link" target="_blank" rel="noopener noreferrer" className="w-full h-[60px] px-4 text-white font-bold text-xs rounded-full flex items-center justify-center gap-3 text-center" style={{ backgroundColor: temaCor }}>
+          <a href="https://drive.google.com/drive/folders/1huxHu6yQruZTX-2E0vQTMHyW68tFnrsF?usp=share_link" target="_blank" rel="noopener noreferrer" className="w-full h-[60px] px-4 text-white font-bold text-xs rounded-full flex items-center justify-center gap-3 text-center transition-transform hover:scale-[1.02] shadow-lg" style={{ backgroundColor: temaCor }}>
             <Shirt className="w-5 h-5" /> TABELA DE MEDIDAS
           </a>
-          <a href="https://melhorrastreio.com.br/" target="_blank" rel="noopener noreferrer" className="w-full h-[60px] px-4 bg-[#111] border-[3px] text-white font-bold text-xs rounded-full flex items-center justify-center gap-3 text-center" style={{ borderColor: temaCor }}>
+          <a href="https://melhorrastreio.com.br/" target="_blank" rel="noopener noreferrer" className="w-full h-[60px] px-4 bg-[#111] border-[3px] text-white font-bold text-xs rounded-full flex items-center justify-center gap-3 text-center transition-transform hover:scale-[1.02] shadow-lg" style={{ borderColor: temaCor }}>
             <Truck className="w-5 h-5" style={{ color: temaCor }} /> RASTREIE O SEU PEDIDO
           </a>
         </div>
 
         {/* MENU RÁPIDO */}
         <div className="w-full mb-4 px-2">
-          <h3 className="text-xs font-black text-white uppercase mb-5">MENU RÁPIDO:</h3>
+          <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">MENU RÁPIDO:</h3>
           <div className="relative flex items-center w-full">
             {showMenuLeft && (
-              <button onClick={() => scroll(menuRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronLeft className="w-5 h-5" /></button>
+              <button onClick={() => scroll(menuRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
             )}
             <div ref={menuRef} onScroll={() => updateArrows(menuRef, setShowMenuLeft, setShowMenuRight)} className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden">
               {CATEGORIAS.map((cat) => (
-                <a key={cat.id} href={cat.link} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 flex-shrink-0">
-                  <div className="w-32 h-48 rounded-2xl border-[3px] bg-[#111] overflow-hidden" style={{ borderColor: temaCor }}>
-                    <img src={cat.img} alt={cat.titulo} className="w-full h-full object-cover" loading="lazy" />
+                <a key={cat.id} href={cat.link} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 flex-shrink-0 group">
+                  <div className="w-32 h-48 rounded-2xl border-[3px] bg-[#111] overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-md" style={{ borderColor: `${temaCor}40` }}>
+                    <SmartImage src={cat.img} alt={cat.titulo} className="rounded-xl" />
                   </div>
-                  <span className="text-[9px] font-black uppercase text-center text-gray-400 mt-1">{cat.titulo}</span>
+                  <span className="text-[9px] font-black uppercase text-center text-gray-400 mt-1 transition-colors group-hover:text-white">{cat.titulo}</span>
                 </a>
               ))}
             </div>
             {showMenuRight && (
-              <button onClick={() => scroll(menuRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronRight className="w-5 h-5" /></button>
+              <button onClick={() => scroll(menuRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
             )}
           </div>
         </div>
 
-        {/* BANNERS */}
+        {/* BANNERS COM SOMBRAS ELEGANTES */}
         <div className="w-full mb-8 px-2 flex flex-col gap-6">
-          <h3 className="text-xs font-black text-white uppercase">CATEGORIAS EM DESTAQUE:</h3>
-          <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="w-full rounded-3xl overflow-hidden border-[3px] block" style={{ borderColor: temaCor }}>
-            <img src="/corta-vento.jpg" className="w-full h-auto block" loading="lazy" />
-          </a>
-          <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="w-full rounded-3xl overflow-hidden border-[3px] block" style={{ borderColor: temaCor }}>
-            <img src="/retro.jpg" className="w-full h-auto block" loading="lazy" />
+          <h3 className="text-xs font-black text-white uppercase tracking-widest">CATEGORIAS EM DESTAQUE:</h3>
+          
+          <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="relative w-full rounded-3xl p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <div className="absolute inset-0 z-0 rounded-3xl opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
+            <div className="relative w-full h-full rounded-[21px] overflow-hidden bg-[#0d1117] z-10">
+              <SmartImage src="/corta-vento.jpg" eager={true} />
+            </div>
           </a>
 
-          {/* PREÇOS */}
+          <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="relative w-full rounded-3xl p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <div className="absolute inset-0 z-0 rounded-3xl opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
+            <div className="relative w-full h-full rounded-[21px] overflow-hidden bg-[#0d1117] z-10">
+              <SmartImage src="/retro.jpg" />
+            </div>
+          </a>
+
+          {/* PREÇOS DINÂMICOS */}
           {precosFormatados.length > 0 && (
             <div className="w-full mt-2 mb-2">
-              <h3 className="text-xs font-black text-white uppercase mb-4">TABELA DE PREÇOS:</h3>
+              <h3 className="text-xs font-black text-white uppercase mb-4 tracking-widest">TABELA DE PREÇOS:</h3>
               <div className="relative flex items-center w-full">
                 {showPrecosLeft && (
-                  <button onClick={() => scroll(precosRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronLeft className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(precosRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
                 )}
                 <div ref={precosRef} onScroll={() => updateArrows(precosRef, setShowPrecosLeft, setShowPrecosRight)} className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden">
                   {precosFormatados.map((preco) => (
-                    <div key={preco.id} className="w-36 h-20 rounded-2xl border-[3px] bg-[#111] flex flex-col items-center justify-center p-3 flex-shrink-0" style={{ borderColor: temaCor }}>
+                    <div key={preco.id} className="w-36 h-20 rounded-2xl border-[3px] bg-[#111] flex flex-col items-center justify-center p-3 flex-shrink-0 transition-transform duration-300 hover:scale-105 shadow-md" style={{ borderColor: `${temaCor}40` }}>
                       <span className="text-[10px] font-black text-gray-400 uppercase mb-1 text-center">{preco.titulo}</span>
                       <span className="text-[17px] font-black text-white" style={{ color: temaCor }}>{preco.precoFinal}</span>
                     </div>
                   ))}
                 </div>
                 {showPrecosRight && (
-                  <button onClick={() => scroll(precosRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(precosRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
             </div>
           )}
 
-          <div className="w-full rounded-3xl overflow-hidden border-[3px]" style={{ borderColor: temaCor }}>
-            <img src="/entrega_02.jpg" alt="Entrega Rápida" className="w-full h-auto block" loading="lazy" />
+          <div className="relative w-full rounded-3xl p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <div className="absolute inset-0 z-0 rounded-3xl opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
+            <div className="relative w-full h-full rounded-[21px] overflow-hidden bg-[#0d1117] z-10">
+              <SmartImage src="/entrega_02.jpg" alt="Entrega Rápida" />
+            </div>
           </div>
         </div>
 
         {/* CAMPO DE BUSCA */}
         <div className="w-full mb-6 px-2">
-          <div className="flex items-center w-full h-14 rounded-2xl bg-[#111] border-[3px]" style={{ borderColor: isSearching ? temaCor : '#333' }}>
+          <div className="flex items-center w-full h-14 rounded-2xl bg-[#111] border-[3px] transition-colors shadow-md" style={{ borderColor: isSearching ? temaCor : '#333' }}>
             <div className="pl-4 pr-3 text-gray-400"><Search className="w-5 h-5" /></div>
             <input type="text" placeholder="Buscar time ou seleção..." value={termoPesquisa} onChange={(e) => setTermoPesquisa(e.target.value)} className="flex-grow h-full bg-transparent text-white text-[13px] outline-none" />
-            {isSearching && <button onClick={() => setTermoPesquisa('')} className="pr-4 text-gray-500"><X size={20} /></button>}
+            {isSearching && <button onClick={() => setTermoPesquisa('')} className="pr-4 text-gray-500 hover:text-white"><X size={20} /></button>}
           </div>
         </div>
 
         {isSearching ? (
           <div className="w-full px-2">
-            <h3 className="text-sm font-black text-white uppercase mb-6 pl-1">Busca Rápida</h3>
+            <h3 className="text-sm font-black text-white uppercase mb-6 pl-1 tracking-widest">Busca Rápida</h3>
             <div className="grid grid-cols-3 gap-y-8 gap-x-3">
               {timesFiltrados.length > 0 ? (
                 timesFiltrados.map((item) => {
                   const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
                   return (
-                    <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3">
-                      <div className="w-[72px] h-[72px] rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden" style={{ borderColor: temaCor }}>
-                        <img src={item.img} alt={item.name} className="w-full h-full object-contain p-[10px]" loading="lazy" />
+                    <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 group">
+                      <div className="w-[72px] h-[72px] rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
+                        <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
                       </div>
-                      <span className="text-[10px] font-bold text-center text-gray-300 leading-tight">{item.name}</span>
+                      <span className="text-[10px] font-bold text-center text-gray-300 leading-tight transition-colors group-hover:text-white">{item.name}</span>
                     </a>
                   );
                 })
@@ -546,227 +587,244 @@ export default function Catalogo() {
           </div>
         ) : (
           <>
-            {/* FIFA */}
             <div className="w-full px-2 mb-10">
-              <div className="w-full rounded-3xl overflow-hidden border-[3px] bg-[#111] flex items-center justify-center" style={{ borderColor: temaCor }}>
-                <img src="/fifa.jpg" alt="FIFA" className="w-full h-auto block" loading="lazy" />
+              <div className="w-full rounded-3xl overflow-hidden border-[3px] bg-[#111] shadow-lg transition-transform hover:scale-[1.02]" style={{ borderColor: `${temaCor}60` }}>
+                <SmartImage src="/fifa.jpg" alt="FIFA Banner" />
               </div>
             </div>
 
             {/* SELEÇÕES */}
             <div className="w-full px-2 mb-8">
-              <h3 className="text-xs font-black text-white uppercase mb-5">SELEÇÕES:</h3>
+              <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">SELEÇÕES:</h3>
               <div className="relative flex items-center w-full">
                 {showSelLeft && (
-                  <button onClick={() => scroll(selecoesRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronLeft className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(selecoesRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
                 )}
                 <div className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden" ref={selecoesRef} onScroll={() => updateArrows(selecoesRef, setShowSelLeft, setShowSelRight)}>
                   {SELECOES_ITEMS.map((item) => {
-                    const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
+                    const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver a seleção de ${item.name.replace('\n', ' ')}`;
                     return (
-                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2.5 min-w-[80px]">
-                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden" style={{ borderColor: temaCor }}>
-                          <img src={item.img} alt={item.name} className="w-full h-full object-contain p-2" loading="lazy" />
+                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2.5 min-w-[80px] group">
+                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
+                          <SmartImage src={item.img} alt={item.name} className="p-2" />
                         </div>
-                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line">{item.name}</span>
+                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
                     );
                   })}
                 </div>
                 {showSelRight && (
-                  <button onClick={() => scroll(selecoesRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(selecoesRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
             </div>
 
             {/* BRASILEIRÃO */}
             <div className="w-full px-2 mb-12">
-              <div className="w-full rounded-[2rem] overflow-hidden border-[3px] bg-[#111] flex items-center justify-center" style={{ borderColor: temaCor }}>
-                <img src="/brasileirao.png" alt="Brasileirão" className="w-full h-auto block" loading="lazy" />
+              <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
+                <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
+                  <SmartImage src="/brasileirao.png" alt="Brasileirão Banner" />
+                </div>
               </div>
             </div>
 
             <div className="w-full px-2 mb-8">
-              <h3 className="text-xs font-black text-white uppercase mb-5">BRASILEIRÃO:</h3>
+              <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">BRASILEIRÃO:</h3>
               <div className="relative flex items-center w-full">
                 {showBrasLeft && (
-                  <button onClick={() => scroll(brasileiraoRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronLeft className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(brasileiraoRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
                 )}
                 <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden" ref={brasileiraoRef} onScroll={() => updateArrows(brasileiraoRef, setShowBrasLeft, setShowBrasRight)}>
                   {BRASILEIRAO_ITEMS.map((item) => {
                     const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
                     return (
-                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px]">
-                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden" style={{ borderColor: temaCor }}>
-                          <img src={item.img} alt={item.name} className="w-full h-full object-contain p-[10px]" loading="lazy" />
+                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] group">
+                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
+                          <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
                         </div>
-                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line">{item.name}</span>
+                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
                     );
                   })}
                 </div>
                 {showBrasRight && (
-                  <button onClick={() => scroll(brasileiraoRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(brasileiraoRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
             </div>
 
             {/* LA LIGA */}
             <div className="w-full px-2 mb-12">
-              <div className="w-full rounded-[2rem] overflow-hidden border-[3px] bg-[#111] flex items-center justify-center" style={{ borderColor: temaCor }}>
-                <img src="/laliga.png" alt="La Liga" className="w-full h-auto block" loading="lazy" />
+              <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
+                <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
+                  <SmartImage src="/laliga.png" alt="La Liga Banner" />
+                </div>
               </div>
             </div>
 
             <div className="w-full px-2 mb-8">
-              <h3 className="text-xs font-black text-white uppercase mb-5">LA LIGA:</h3>
+              <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">LA LIGA:</h3>
               <div className="relative flex items-center w-full">
                 {showLaligaLeft && (
-                  <button onClick={() => scroll(laligaRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronLeft className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(laligaRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
                 )}
                 <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden" ref={laligaRef} onScroll={() => updateArrows(laligaRef, setShowLaligaLeft, setShowLaligaRight)}>
                   {LALIGA_ITEMS.map((item) => {
                     const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
                     return (
-                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px]">
-                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden" style={{ borderColor: temaCor }}>
-                          <img src={item.img} alt={item.name} className="w-full h-full object-contain p-[10px]" loading="lazy" />
+                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] group">
+                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
+                          <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
                         </div>
-                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line">{item.name}</span>
+                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
                     );
                   })}
                 </div>
                 {showLaligaRight && (
-                  <button onClick={() => scroll(laligaRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(laligaRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
             </div>
 
             {/* PREMIER LEAGUE */}
             <div className="w-full px-2 mb-12">
-              <div className="w-full rounded-[2rem] overflow-hidden border-[3px] bg-[#111] flex items-center justify-center" style={{ borderColor: temaCor }}>
-                <img src="/premier-league.png" alt="Premier" className="w-full h-auto block" loading="lazy" />
+              <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
+                <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
+                  <SmartImage src="/premier-league.png" alt="Premier League Banner" />
+                </div>
               </div>
             </div>
 
             <div className="w-full px-2 mb-8">
-              <h3 className="text-xs font-black text-white uppercase mb-5">PREMIER LEAGUE:</h3>
+              <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">PREMIER LEAGUE:</h3>
               <div className="relative flex items-center w-full">
                 {showPremierLeft && (
-                  <button onClick={() => scroll(premierRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronLeft className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(premierRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
                 )}
                 <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden" ref={premierRef} onScroll={() => updateArrows(premierRef, setShowPremierLeft, setShowPremierRight)}>
                   {PREMIER_ITEMS.map((item) => {
                     const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
                     return (
-                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px]">
-                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden" style={{ borderColor: temaCor }}>
-                          <img src={item.img} alt={item.name} className="w-full h-full object-contain p-[10px]" loading="lazy" />
+                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] group">
+                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
+                          <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
                         </div>
-                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line">{item.name}</span>
+                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
                     );
                   })}
                 </div>
                 {showPremierRight && (
-                  <button onClick={() => scroll(premierRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(premierRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
             </div>
 
             {/* SERIE A */}
             <div className="w-full px-2 mb-12">
-              <div className="w-full rounded-[2rem] overflow-hidden border-[3px] bg-[#111] flex items-center justify-center" style={{ borderColor: temaCor }}>
-                <img src="/serie-a.png" alt="Serie A" className="w-full h-auto block" loading="lazy" />
+              <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
+                <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
+                  <SmartImage src="/serie-a.png" alt="Serie A Banner" />
+                </div>
               </div>
             </div>
 
             <div className="w-full px-2 mb-8">
-              <h3 className="text-xs font-black text-white uppercase mb-5">SERIE A:</h3>
+              <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">SERIE A:</h3>
               <div className="relative flex items-center w-full">
                 {showSerieALeft && (
-                  <button onClick={() => scroll(serieARef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronLeft className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(serieARef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
                 )}
                 <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden" ref={serieARef} onScroll={() => updateArrows(serieARef, setShowSerieALeft, setShowSerieARight)}>
                   {SERIEA_ITEMS.map((item) => {
                     const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
                     return (
-                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px]">
-                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden" style={{ borderColor: temaCor }}>
-                          <img src={item.img} alt={item.name} className="w-full h-full object-contain p-[10px]" loading="lazy" />
+                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] group">
+                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
+                          <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
                         </div>
-                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line">{item.name}</span>
+                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
                     );
                   })}
                 </div>
                 {showSerieARight && (
-                  <button onClick={() => scroll(serieARef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(serieARef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
             </div>
 
             {/* LIGUE 1 */}
             <div className="w-full px-2 mb-12">
-              <div className="w-full rounded-[2rem] overflow-hidden border-[3px] bg-[#111] flex items-center justify-center" style={{ borderColor: temaCor }}>
-                <img src="/ligue-1.png" alt="Ligue 1" className="w-full h-auto block" loading="lazy" />
+              <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
+                <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
+                  <SmartImage src="/ligue-1.png" alt="Ligue 1 Banner" />
+                </div>
               </div>
             </div>
 
             <div className="w-full px-2 mb-8">
-              <h3 className="text-xs font-black text-white uppercase mb-5">LIGUE 1:</h3>
+              <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">LIGUE 1:</h3>
               <div className="relative flex items-center w-full">
                 {showLigue1Left && (
-                  <button onClick={() => scroll(ligue1Ref, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronLeft className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(ligue1Ref, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
                 )}
                 <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden" ref={ligue1Ref} onScroll={() => updateArrows(ligue1Ref, setShowLigue1Left, setShowLigue1Right)}>
                   {LIGUE1_ITEMS.map((item) => {
                     const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
                     return (
-                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px]">
-                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden" style={{ borderColor: temaCor }}>
-                          <img src={item.img} alt={item.name} className="w-full h-full object-contain p-[10px]" loading="lazy" />
+                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] group">
+                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
+                          <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
                         </div>
-                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line">{item.name}</span>
+                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
                     );
                   })}
                 </div>
                 {showLigue1Right && (
-                  <button onClick={() => scroll(ligue1Ref, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(ligue1Ref, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
             </div>
 
             {/* BUNDESLIGA */}
             <div className="w-full px-2 mb-12">
-              <div className="w-full rounded-[2rem] overflow-hidden border-[3px] bg-[#111] flex items-center justify-center" style={{ borderColor: temaCor }}>
-                <img src="/bundesliga.png" alt="Bundesliga" className="w-full h-auto block" loading="lazy" />
+              <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
+                <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
+                  <SmartImage src="/bundesliga.png" alt="Bundesliga Banner" />
+                </div>
               </div>
             </div>
 
             <div className="w-full px-2 mb-8">
-              <h3 className="text-xs font-black text-white uppercase mb-5">BUNDESLIGA:</h3>
+              <h3 className="text-xs font-black text-white uppercase mb-5 tracking-widest">BUNDESLIGA:</h3>
               <div className="relative flex items-center w-full">
                 {showBundesLeft && (
-                  <button onClick={() => scroll(bundesligaRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronLeft className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(bundesligaRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
                 )}
                 <div className="flex overflow-x-auto gap-5 pb-5 w-full [&::-webkit-scrollbar]:hidden" ref={bundesligaRef} onScroll={() => updateArrows(bundesligaRef, setShowBundesLeft, setShowBundesRight)}>
                   {BUNDESLIGA_ITEMS.map((item) => {
                     const urlDestino = item.link || `https://wa.me/${whatsAppNumber}?text=Olá! Gostaria de ver o time ${item.name.replace('\n', ' ')}`;
                     return (
-                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px]">
-                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden" style={{ borderColor: temaCor }}>
-                          <img src={item.img} alt={item.name} className="w-full h-full object-contain p-[10px]" loading="lazy" />
+                      <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] group">
+                        <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
+                          <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
                         </div>
-                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line">{item.name}</span>
+                        <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
                     );
                   })}
                 </div>
                 {showBundesRight && (
-                  <button onClick={() => scroll(bundesligaRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center"><ChevronRight className="w-5 h-5" /></button>
+                  <button onClick={() => scroll(bundesligaRef, 'right')} className="absolute -right-2 z-10 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
                 )}
               </div>
             </div>
@@ -775,15 +833,15 @@ export default function Catalogo() {
         )}
 
         {/* BANNER SUPORTE */}
-        <div className="w-full px-2 mt-4 mb-4">
-          <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-full rounded-[2rem] overflow-hidden block">
-            <img src="/SUPORTE.png" alt="Suporte" className="w-full h-auto block" loading="lazy" />
+        <div className="w-full px-2 -mt-4 mb-4">
+          <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-full rounded-[2rem] overflow-hidden block transition-transform hover:scale-[1.02] shadow-2xl">
+            <SmartImage src="/SUPORTE.png" alt="Suporte" />
           </a>
         </div>
 
       </div>
 
-      <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full">
+      <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-[0_4px_25px_rgba(37,211,102,0.4)] transition-transform hover:scale-110">
         <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
       </a>
     </div>
