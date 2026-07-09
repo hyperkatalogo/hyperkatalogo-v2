@@ -339,7 +339,6 @@ export default function Catalogo() {
   const [showBundesLeft, setShowBundesLeft] = useState(false);
   const [showBundesRight, setShowBundesRight] = useState(true);
 
-  // FILTRAGEM INTELIGENTE DE CATEGORIAS (Esconde o que estiver desativado no painel)
   const categoriasAtivas = useMemo(() => {
     if (!catalogo?.categorias) return CATEGORIAS;
     return CATEGORIAS.filter(cat => {
@@ -353,7 +352,6 @@ export default function Catalogo() {
     });
   }, [catalogo]);
 
-  // FILTRAGEM INTELIGENTE DA BUSCA (Só pesquisa em ligas que estão ativadas)
   const todosTimes = useMemo(() => {
     let times: any[] = [];
     const ligas = catalogo?.ligas || {};
@@ -482,11 +480,11 @@ export default function Catalogo() {
   const temaCor = catalogo?.theme_color || '#007AFF';
 
   return (
-    <div className="min-h-screen w-full bg-[#050505] text-white pt-10 px-4 pb-28" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+    <div className="min-h-screen w-full bg-[#050505] text-white pt-10 px-4 pb-16" style={{ fontFamily: "'Montserrat', sans-serif" }}>
       <div className="w-full max-w-sm mx-auto flex flex-col items-center">
         
         {/* CABEÇALHO */}
-        <div className="flex items-center gap-2.5 bg-[#111] border border-white/10 px-4 py-2 rounded-full mb-8 shadow-lg">
+        <div className="flex items-center gap-2.5 bg-[#111] border border-[#333] px-4 py-2 rounded-full mb-8 shadow-lg">
           <div className="w-2.5 h-2.5 bg-[#25D366] rounded-full animate-pulse shadow-[0_0_8px_#25D366]"></div>
           <span className="text-xs font-black tracking-widest">ONLINE</span>
         </div>
@@ -494,7 +492,7 @@ export default function Catalogo() {
         <h2 className="text-[10px] font-bold text-gray-400 mb-5 uppercase tracking-widest">CATÁLOGO OFICIAL</h2>
 
         {/* LOGO */}
-        <div className="w-28 h-28 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden mb-6 shadow-xl transition-transform hover:scale-105" style={{ borderColor: temaCor, boxShadow: `0 0 20px ${temaCor}30` }}>
+        <div className="w-28 h-28 rounded-full border-[3px] bg-white flex items-center justify-center overflow-hidden mb-6 shadow-xl transition-transform hover:scale-105" style={{ borderColor: temaCor, boxShadow: `0 0 30px ${temaCor}40` }}>
           <SmartImage src={catalogo?.logo_url || "/logo.jpg"} alt="Logo" eager={true} className="w-full h-full rounded-full" imgClass="object-contain" />
         </div>
         
@@ -508,7 +506,7 @@ export default function Catalogo() {
 
         {/* REDES SOCIAIS */}
         <h3 className="text-[11px] font-black text-white uppercase mb-5 tracking-widest">FALE CONOSCO:</h3>
-        <div className="flex items-start justify-center gap-6 mb-10">
+        <div className="flex items-start justify-center gap-6 mb-8">
           {catalogo?.instagram && (
             <div className="flex flex-col items-center gap-3 group">
               <a href={catalogo.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-[0_0_15px_rgba(220,39,67,0.3)]">
@@ -527,10 +525,9 @@ export default function Catalogo() {
             <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">WHATSAPP</span>
           </div>
 
-          {/* TIKTOK COM IMAGEM PNG (Para alterar o tamanho mude o w-5 h-5 para w-6 h-6, etc) */}
           {catalogo?.tiktok && (
             <div className="flex flex-col items-center gap-3 group">
-              <a href={catalogo.tiktok} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#111] flex items-center justify-center transition-transform hover:scale-110 shadow-lg">
+              <a href={catalogo.tiktok} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#111] flex items-center justify-center transition-transform hover:scale-110 shadow-lg border border-[#333]">
                 <img src="/logottk.png" alt="TikTok" className="w-5 h-5 object-contain" />
               </a>
               <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">TIKTOK</span>
@@ -538,105 +535,23 @@ export default function Catalogo() {
           )}
         </div>
 
-        {/* BOTÕES EXTRAS (TABELA E RASTREIO IDÊNTICOS AO PRINT) */}
+        <div className="w-full h-[1px] mb-8 opacity-60" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
+
+        {/* BOTÕES EXTRAS */}
         <div className="w-full flex flex-col gap-4 px-2 mb-12">
           <a href="https://drive.google.com/drive/folders/1huxHu6yQruZTX-2E0vQTMHyW68tFnrsF?usp=share_link" target="_blank" rel="noopener noreferrer" className="w-full h-14 rounded-full flex items-center justify-center gap-3 text-white font-bold text-[11px] sm:text-xs transition-transform hover:scale-[1.02] shadow-lg" style={{ backgroundColor: temaCor }}>
             <Shirt size={20} /> CLIQUE AQUI E VEJA A TABELA DE MEDIDAS
           </a>
 
-          <a href="https://melhorrastreio.com.br/" target="_blank" rel="noopener noreferrer" className="w-full h-14 rounded-full bg-[#050505] border-[3px] flex items-center justify-center gap-3 text-white font-bold text-[11px] sm:text-xs transition-transform hover:scale-[1.02]" style={{ borderColor: temaCor }}>
+          <a href="https://melhorrastreio.com.br/" target="_blank" rel="noopener noreferrer" className="w-full h-14 rounded-full bg-transparent border-[3px] flex items-center justify-center gap-3 text-white font-bold text-[11px] sm:text-xs transition-transform hover:scale-[1.02]" style={{ borderColor: temaCor }}>
             <Truck size={20} style={{ color: temaCor }} /> RASTREIE O SEU PEDIDO CLICANDO AQUI
           </a>
         </div>
 
-        {/* MENU RÁPIDO */}
-        {categoriasAtivas.length > 0 && (
-          <FadeInSection className="w-full mb-4 px-2">
-            <div className="flex items-center gap-2 mb-5">
-              <h3 className="text-xs font-black text-white uppercase tracking-widest whitespace-nowrap">MENU RÁPIDO:</h3>
-              <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
-            </div>
-            <div className="relative flex items-center w-full">
-              {showMenuLeft && (
-                <button onClick={() => scroll(menuRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
-              )}
-              <div ref={menuRef} onScroll={() => updateArrows(menuRef, setShowMenuLeft, setShowMenuRight)} className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden">
-                {categoriasAtivas.map((cat) => (
-                  <a key={cat.id} href={cat.link} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center flex-shrink-0 group">
-                    <div className="w-32 h-48 rounded-2xl border-[3px] bg-[#111] overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-md" style={{ borderColor: `${temaCor}60` }}>
-                      <SmartImage src={cat.img} alt={cat.titulo} className="w-full h-full" />
-                    </div>
-                    <span className="text-[10px] font-bold uppercase text-center text-gray-400 mt-2 transition-colors group-hover:text-white">{cat.titulo}</span>
-                  </a>
-                ))}
-              </div>
-              {showMenuRight && (
-                <button onClick={() => scroll(menuRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
-              )}
-            </div>
-          </FadeInSection>
-        )}
-
-        {/* BANNERS CATEGORIAS EM DESTAQUE */}
-        <div className="w-full mb-8 px-2 flex flex-col gap-6">
-          <FadeInSection>
-            <div className="flex items-center gap-2 mb-0">
-              <h3 className="text-xs font-black text-white uppercase tracking-widest whitespace-nowrap">CATEGORIAS EM DESTAQUE:</h3>
-              <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
-            </div>
-          </FadeInSection>
-          
-          {catalogo?.categorias?.cortaVento !== false && (
-            <FadeInSection>
-              <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="w-full rounded-[20px] overflow-hidden border-[3px] block transition-transform duration-300 hover:scale-[1.02] shadow-md" style={{ borderColor: `${temaCor}60` }}>
-                <SmartImage src="/corta-vento.jpg" eager={true} className="w-full h-full" />
-              </a>
-            </FadeInSection>
-          )}
-
-          {catalogo?.categorias?.retro !== false && (
-            <FadeInSection>
-              <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="w-full rounded-[20px] overflow-hidden border-[3px] block transition-transform duration-300 hover:scale-[1.02] shadow-md" style={{ borderColor: `${temaCor}60` }}>
-                <SmartImage src="/retro.jpg" className="w-full h-full" />
-              </a>
-            </FadeInSection>
-          )}
-
-          {/* PREÇOS DINÂMICOS */}
-          {precosFormatados.length > 0 && (
-            <FadeInSection className="w-full mt-2 mb-2">
-              <div className="flex items-center gap-2 mb-4">
-                <h3 className="text-xs font-black text-white uppercase tracking-widest whitespace-nowrap">TABELA DE PREÇOS:</h3>
-                <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
-              </div>
-              <div className="relative flex items-center w-full">
-                {showPrecosLeft && (
-                  <button onClick={() => scroll(precosRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
-                )}
-                <div ref={precosRef} onScroll={() => updateArrows(precosRef, setShowPrecosLeft, setShowPrecosRight)} className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden">
-                  {precosFormatados.map((preco) => (
-                    <div key={preco.id} className="w-36 h-20 rounded-2xl border-[3px] bg-[#111] flex flex-col items-center justify-center p-3 flex-shrink-0 transition-transform duration-300 hover:scale-105 shadow-md" style={{ borderColor: `${temaCor}40` }}>
-                      <span className="text-[10px] font-black text-gray-400 uppercase mb-1 text-center">{preco.titulo}</span>
-                      <span className="text-[17px] font-black text-white" style={{ color: temaCor }}>{preco.precoFinal}</span>
-                    </div>
-                  ))}
-                </div>
-                {showPrecosRight && (
-                  <button onClick={() => scroll(precosRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
-                )}
-              </div>
-            </FadeInSection>
-          )}
-
-          <FadeInSection>
-            <div className="w-full rounded-[20px] overflow-hidden border-[3px] block shadow-md" style={{ borderColor: `${temaCor}60` }}>
-              <SmartImage src="/entrega_02.jpg" alt="Entrega Rápida" className="w-full h-full" />
-            </div>
-          </FadeInSection>
-        </div>
-
-        {/* CAMPO DE BUSCA */}
-        <FadeInSection className="w-full mb-6 px-2">
+        {/* ===================================================================== */}
+        {/* BUSCA MOVIDA PARA CIMA DOS MENUS                                      */}
+        {/* ===================================================================== */}
+        <FadeInSection className="w-full mb-8 px-2">
           <div className="flex items-center w-full h-14 rounded-2xl bg-[#111] border-[3px] transition-colors shadow-md" style={{ borderColor: isSearching ? temaCor : '#333' }}>
             <div className="pl-4 pr-3 text-gray-400"><Search className="w-5 h-5" /></div>
             <input type="text" placeholder="Buscar time ou seleção..." value={termoPesquisa} onChange={(e) => setTermoPesquisa(e.target.value)} className="flex-grow h-full bg-transparent text-white text-[13px] font-semibold outline-none" />
@@ -664,16 +579,109 @@ export default function Catalogo() {
                 <div className="col-span-3 text-center py-10 text-gray-500 bg-[#111] rounded-2xl border border-[#333]">Nenhum time encontrado.</div>
               )}
             </div>
+            
+            {/* O Banner de suporte fica afastado quando a busca está aberta */}
+            <div className="w-full mt-16 mb-4">
+              <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-full rounded-[2rem] overflow-hidden block transition-transform hover:scale-[1.02] shadow-2xl">
+                <SmartImage src="/SUPORTE.png" alt="Suporte" className="w-full h-full" />
+              </a>
+            </div>
           </div>
         ) : (
           <>
+            {/* MENU RÁPIDO */}
+            {categoriasAtivas.length > 0 && (
+              <FadeInSection className="w-full mb-4 px-2">
+                <div className="flex items-center gap-2 mb-5">
+                  <h3 className="text-xs font-black text-white uppercase tracking-widest whitespace-nowrap">MENU RÁPIDO:</h3>
+                  <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                </div>
+                <div className="relative flex items-center w-full">
+                  {showMenuLeft && (
+                    <button onClick={() => scroll(menuRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
+                  )}
+                  <div ref={menuRef} onScroll={() => updateArrows(menuRef, setShowMenuLeft, setShowMenuRight)} className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden">
+                    {categoriasAtivas.map((cat) => (
+                      <a key={cat.id} href={cat.link} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center flex-shrink-0 group">
+                        <div className="w-32 h-48 rounded-2xl border-[3px] bg-[#111] overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-md" style={{ borderColor: `${temaCor}60` }}>
+                          <SmartImage src={cat.img} alt={cat.titulo} className="w-full h-full" />
+                        </div>
+                        <span className="text-[10px] font-bold uppercase text-center text-gray-400 mt-2 transition-colors group-hover:text-white">{cat.titulo}</span>
+                      </a>
+                    ))}
+                  </div>
+                  {showMenuRight && (
+                    <button onClick={() => scroll(menuRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
+                  )}
+                </div>
+              </FadeInSection>
+            )}
+
+            {/* BANNERS CATEGORIAS EM DESTAQUE */}
+            <div className="w-full mb-8 px-2 flex flex-col gap-6">
+              <FadeInSection>
+                <div className="flex items-center gap-2 mb-0">
+                  <h3 className="text-xs font-black text-white uppercase tracking-widest whitespace-nowrap">CATEGORIAS EM DESTAQUE:</h3>
+                  <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                </div>
+              </FadeInSection>
+              
+              {catalogo?.categorias?.cortaVento !== false && (
+                <FadeInSection>
+                  <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="w-full rounded-[20px] overflow-hidden border-[3px] block transition-transform duration-300 hover:scale-[1.02] shadow-md" style={{ borderColor: `${temaCor}60` }}>
+                    <SmartImage src="/corta-vento.jpg" eager={true} className="w-full h-full" />
+                  </a>
+                </FadeInSection>
+              )}
+
+              {catalogo?.categorias?.retro !== false && (
+                <FadeInSection>
+                  <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="w-full rounded-[20px] overflow-hidden border-[3px] block transition-transform duration-300 hover:scale-[1.02] shadow-md" style={{ borderColor: `${temaCor}60` }}>
+                    <SmartImage src="/retro.jpg" className="w-full h-full" />
+                  </a>
+                </FadeInSection>
+              )}
+
+              {/* PREÇOS DINÂMICOS */}
+              {precosFormatados.length > 0 && (
+                <FadeInSection className="w-full mt-2 mb-2">
+                  <div className="flex items-center gap-2 mb-4">
+                    <h3 className="text-xs font-black text-white uppercase tracking-widest whitespace-nowrap">TABELA DE PREÇOS:</h3>
+                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+                  </div>
+                  <div className="relative flex items-center w-full">
+                    {showPrecosLeft && (
+                      <button onClick={() => scroll(precosRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
+                    )}
+                    <div ref={precosRef} onScroll={() => updateArrows(precosRef, setShowPrecosLeft, setShowPrecosRight)} className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden">
+                      {precosFormatados.map((preco) => (
+                        <div key={preco.id} className="w-36 h-20 rounded-2xl border-[3px] bg-[#111] flex flex-col items-center justify-center p-3 flex-shrink-0 transition-transform duration-300 hover:scale-105 shadow-md" style={{ borderColor: `${temaCor}40` }}>
+                          <span className="text-[10px] font-black text-gray-400 uppercase mb-1 text-center">{preco.titulo}</span>
+                          <span className="text-[17px] font-black text-white" style={{ color: temaCor }}>{preco.precoFinal}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {showPrecosRight && (
+                      <button onClick={() => scroll(precosRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
+                    )}
+                  </div>
+                </FadeInSection>
+              )}
+
+              <FadeInSection>
+                <div className="w-full rounded-[20px] overflow-hidden border-[3px] block shadow-md" style={{ borderColor: `${temaCor}60` }}>
+                  <SmartImage src="/entrega_02.jpg" alt="Entrega Rápida" className="w-full h-full" />
+                </div>
+              </FadeInSection>
+            </div>
+
             <FadeInSection className="w-full px-2 mb-10">
               <div className="w-full rounded-[20px] overflow-hidden border-[3px] bg-[#111] shadow-lg transition-transform hover:scale-[1.02]" style={{ borderColor: `${temaCor}60` }}>
                 <SmartImage src="/fifa.jpg" alt="FIFA Banner" className="w-full h-full" />
               </div>
             </FadeInSection>
 
-            {/* SELEÇÕES (Sincronizado com Formulário) */}
+            {/* SELEÇÕES */}
             {catalogo?.ligas?.selecoes !== false && (
               <FadeInSection className="w-full px-2 mb-8">
                 <div className="flex items-center gap-2 mb-5">
@@ -932,13 +940,56 @@ export default function Catalogo() {
               </>
             )}
 
+            {/* BANNER SUPORTE MODO NORMAL (Com espaçamento corrigido) */}
+            <FadeInSection className="w-full px-2 -mt-6 mb-8">
+              <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-full rounded-[2rem] overflow-hidden block transition-transform hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.3)]">
+                <SmartImage src="/SUPORTE.png" alt="Suporte" className="w-full h-full" />
+              </a>
+            </FadeInSection>
           </>
         )}
 
-        {/* BANNER SUPORTE */}
-        <FadeInSection className="w-full px-2 -mt-4 mb-4">
-          <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-full rounded-[2rem] overflow-hidden block transition-transform hover:scale-[1.02] shadow-2xl">
-            <SmartImage src="/SUPORTE.png" alt="Suporte" className="w-full h-full" />
+    {/* ===================================================================== */}
+        {/* ASSINATURA PREMIUM HYPERKATALOGO                                      */}
+        {/* ===================================================================== */}
+        <FadeInSection className="w-full mt-21 mb-16 flex flex-col items-center justify-center px-2">
+          <a
+            href="https://wa.me/5567993053894?text=Olá! Gostaria de saber mais sobre como criar um catálogo."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center w-full group md:hover:scale-[1.01] transition-transform duration-500 ease-out"
+          >
+            {/* LINHA HORIZONTAL COM GRADIENTE E BRILHO SUTIL */}
+            <div className="relative w-[70%] max-w-[250px] h-[1px] mb-8">
+              <div 
+                className="absolute inset-0"
+                style={{ backgroundImage: 'linear-gradient(to right, transparent, #007AFF, transparent)' }} 
+              />
+              {/* Glow ativado apenas no Hover (Desktop) */}
+              <div 
+                className="absolute inset-0 opacity-0 md:group-hover:opacity-100 transition-opacity duration-700 blur-[3px]"
+                style={{ backgroundImage: 'linear-gradient(to right, transparent, #007AFF, transparent)' }} 
+              />
+            </div>
+
+            {/* POWERED BY */}
+            <span className="text-[9px] font-semibold text-[#7A7A7A] uppercase tracking-[0.4em] mb-1.5">
+              Criado por:
+            </span>
+
+            {/* NOME DA MARCA */}
+            <div className="text-[20px] font-black tracking-tight mb-2.5 flex items-start">
+              <span className="text-white">Hyper</span>
+              <span style={{ color: '#007AFF' }}>Katalogo</span>
+              <span className="text-[9px] text-[#7A7A7A] font-bold ml-0.5 mt-0.5">®</span>
+            </div>
+
+            {/* SUBTÍTULO */}
+            <span className="text-[11px] text-[#7A7A7A] font-medium text-center mb-8 tracking-wide">
+              Plataforma profissional para catálogos esportivos.
+            </span>
+
+           
           </a>
         </FadeInSection>
 
