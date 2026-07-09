@@ -339,6 +339,7 @@ export default function Catalogo() {
   const [showBundesLeft, setShowBundesLeft] = useState(false);
   const [showBundesRight, setShowBundesRight] = useState(true);
 
+  // FILTRAGEM INTELIGENTE DE CATEGORIAS
   const categoriasAtivas = useMemo(() => {
     if (!catalogo?.categorias) return CATEGORIAS;
     return CATEGORIAS.filter(cat => {
@@ -352,6 +353,7 @@ export default function Catalogo() {
     });
   }, [catalogo]);
 
+  // FILTRAGEM INTELIGENTE DA BUSCA
   const todosTimes = useMemo(() => {
     let times: any[] = [];
     const ligas = catalogo?.ligas || {};
@@ -478,13 +480,15 @@ export default function Catalogo() {
   const whatsAppNumber = catalogo?.whatsapp ? String(catalogo.whatsapp).replace(/\D/g, '') : '556793053894';
   const whatsAppLink = `https://wa.me/${whatsAppNumber}`;
   const temaCor = catalogo?.theme_color || '#007AFF';
+  // Link direto para você, usado apenas na assinatura
+  const assinaturaLink = "https://wa.me/5567993053894?text=Olá! Gostaria de saber mais sobre como criar um catálogo como este.";
 
   return (
-    <div className="min-h-screen w-full bg-[#050505] text-white pt-10 px-4 pb-16" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+    <div className="min-h-screen w-full bg-[#050505] text-white pt-10 px-4 pb-0" style={{ fontFamily: "'Montserrat', sans-serif" }}>
       <div className="w-full max-w-sm mx-auto flex flex-col items-center">
         
         {/* CABEÇALHO */}
-        <div className="flex items-center gap-2.5 bg-[#111] border border-[#333] px-4 py-2 rounded-full mb-8 shadow-lg">
+        <div className="flex items-center gap-2.5 bg-[#111] border border-white/10 px-4 py-2 rounded-full mb-8 shadow-lg">
           <div className="w-2.5 h-2.5 bg-[#25D366] rounded-full animate-pulse shadow-[0_0_8px_#25D366]"></div>
           <span className="text-xs font-black tracking-widest">ONLINE</span>
         </div>
@@ -509,7 +513,7 @@ export default function Catalogo() {
         <div className="flex items-start justify-center gap-6 mb-8">
           {catalogo?.instagram && (
             <div className="flex flex-col items-center gap-3 group">
-              <a href={catalogo.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-[0_0_15px_rgba(220,39,67,0.3)]">
+              <a href={catalogo.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-[0_0_15px_rgba(220,39,67,0.3)] border border-[#333]">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
               </a>
               <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">INSTAGRAM</span>
@@ -517,7 +521,7 @@ export default function Catalogo() {
           )}
           
           <div className="flex flex-col items-center gap-3 group">
-            <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-[0_0_15px_rgba(37,211,102,0.3)]">
+            <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-[0_0_15px_rgba(37,211,102,0.3)] border border-[#333]">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
               </svg>
@@ -535,9 +539,10 @@ export default function Catalogo() {
           )}
         </div>
 
+        {/* LINHA DIVISÓRIA ABAIXO DAS REDES SOCIAIS IDÊNTICA AO PRINT */}
         <div className="w-full h-[1px] mb-8 opacity-60" style={{ backgroundImage: `linear-gradient(to right, transparent, ${temaCor}, transparent)` }}></div>
 
-        {/* BOTÕES EXTRAS */}
+        {/* BOTÕES EXTRAS (TABELA E RASTREIO IDÊNTICOS AO PRINT) */}
         <div className="w-full flex flex-col gap-4 px-2 mb-12">
           <a href="https://drive.google.com/drive/folders/1huxHu6yQruZTX-2E0vQTMHyW68tFnrsF?usp=share_link" target="_blank" rel="noopener noreferrer" className="w-full h-14 rounded-full flex items-center justify-center gap-3 text-white font-bold text-[11px] sm:text-xs transition-transform hover:scale-[1.02] shadow-lg" style={{ backgroundColor: temaCor }}>
             <Shirt size={20} /> CLIQUE AQUI E VEJA A TABELA DE MEDIDAS
@@ -549,7 +554,97 @@ export default function Catalogo() {
         </div>
 
         {/* ===================================================================== */}
-        {/* BUSCA MOVIDA PARA CIMA DOS MENUS                                      */}
+        {/* SEMPRE VISÍVEL: MENU RÁPIDO E CATEGORIAS EM DESTAQUE                  */}
+        {/* ===================================================================== */}
+
+        {/* MENU RÁPIDO */}
+        {categoriasAtivas.length > 0 && (
+          <FadeInSection className="w-full mb-4 px-2">
+            <div className="flex items-center gap-2 mb-5">
+              <h3 className="text-xs font-black text-white uppercase tracking-widest whitespace-nowrap">MENU RÁPIDO:</h3>
+              <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+            </div>
+            <div className="relative flex items-center w-full">
+              {showMenuLeft && (
+                <button onClick={() => scroll(menuRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
+              )}
+              <div ref={menuRef} onScroll={() => updateArrows(menuRef, setShowMenuLeft, setShowMenuRight)} className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden">
+                {categoriasAtivas.map((cat) => (
+                  <a key={cat.id} href={cat.link} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center flex-shrink-0 group">
+                    <div className="w-32 h-48 rounded-2xl border-[3px] bg-[#111] overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-md" style={{ borderColor: `${temaCor}60` }}>
+                      <SmartImage src={cat.img} alt={cat.titulo} className="w-full h-full" />
+                    </div>
+                    <span className="text-[10px] font-bold uppercase text-center text-gray-400 mt-2 transition-colors group-hover:text-white">{cat.titulo}</span>
+                  </a>
+                ))}
+              </div>
+              {showMenuRight && (
+                <button onClick={() => scroll(menuRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
+              )}
+            </div>
+          </FadeInSection>
+        )}
+
+        {/* BANNERS CATEGORIAS EM DESTAQUE E PREÇOS */}
+        <div className="w-full mb-8 px-2 flex flex-col gap-6">
+          <FadeInSection>
+            <div className="flex items-center gap-2 mb-0">
+              <h3 className="text-xs font-black text-white uppercase tracking-widest whitespace-nowrap">CATEGORIAS EM DESTAQUE:</h3>
+              <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+            </div>
+          </FadeInSection>
+          
+          {catalogo?.categorias?.cortaVento !== false && (
+            <FadeInSection>
+              <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="w-full rounded-[20px] overflow-hidden border-[3px] block transition-transform duration-300 hover:scale-[1.02] shadow-md" style={{ borderColor: `${temaCor}60` }}>
+                <SmartImage src="/corta-vento.jpg" eager={true} className="w-full h-full" />
+              </a>
+            </FadeInSection>
+          )}
+
+          {catalogo?.categorias?.retro !== false && (
+            <FadeInSection>
+              <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="w-full rounded-[20px] overflow-hidden border-[3px] block transition-transform duration-300 hover:scale-[1.02] shadow-md" style={{ borderColor: `${temaCor}60` }}>
+                <SmartImage src="/retro.jpg" className="w-full h-full" />
+              </a>
+            </FadeInSection>
+          )}
+
+          {/* PREÇOS DINÂMICOS */}
+          {precosFormatados.length > 0 && (
+            <FadeInSection className="w-full mt-2 mb-2">
+              <div className="flex items-center gap-2 mb-4">
+                <h3 className="text-xs font-black text-white uppercase tracking-widest whitespace-nowrap">TABELA DE PREÇOS:</h3>
+                <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
+              </div>
+              <div className="relative flex items-center w-full">
+                {showPrecosLeft && (
+                  <button onClick={() => scroll(precosRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
+                )}
+                <div ref={precosRef} onScroll={() => updateArrows(precosRef, setShowPrecosLeft, setShowPrecosRight)} className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden">
+                  {precosFormatados.map((preco) => (
+                    <div key={preco.id} className="w-36 h-20 rounded-2xl border-[3px] bg-[#111] flex flex-col items-center justify-center p-3 flex-shrink-0 transition-transform duration-300 hover:scale-105 shadow-md" style={{ borderColor: `${temaCor}40` }}>
+                      <span className="text-[10px] font-black text-gray-400 uppercase mb-1 text-center">{preco.titulo}</span>
+                      <span className="text-[17px] font-black text-white" style={{ color: temaCor }}>{preco.precoFinal}</span>
+                    </div>
+                  ))}
+                </div>
+                {showPrecosRight && (
+                  <button onClick={() => scroll(precosRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
+                )}
+              </div>
+            </FadeInSection>
+          )}
+
+          <FadeInSection>
+            <div className="w-full rounded-[20px] overflow-hidden border-[3px] block shadow-md" style={{ borderColor: `${temaCor}60` }}>
+              <SmartImage src="/entrega_02.jpg" alt="Entrega Rápida" className="w-full h-full" />
+            </div>
+          </FadeInSection>
+        </div>
+
+        {/* ===================================================================== */}
+        {/* BUSCA MOVIDA PARA EXATAMENTE ANTES DO BANNER DA FIFA                  */}
         {/* ===================================================================== */}
         <FadeInSection className="w-full mb-8 px-2">
           <div className="flex items-center w-full h-14 rounded-2xl bg-[#111] border-[3px] transition-colors shadow-md" style={{ borderColor: isSearching ? temaCor : '#333' }}>
@@ -559,6 +654,9 @@ export default function Catalogo() {
           </div>
         </FadeInSection>
 
+        {/* ===================================================================== */}
+        {/* RENDERIZAÇÃO CONDICIONAL DA BUSCA E DAS LIGAS/FIFA                    */}
+        {/* ===================================================================== */}
         {isSearching ? (
           <div className="w-full px-2">
             <h3 className="text-sm font-black text-white uppercase mb-6 pl-1 tracking-widest">Busca Rápida</h3>
@@ -580,7 +678,7 @@ export default function Catalogo() {
               )}
             </div>
             
-            {/* O Banner de suporte fica afastado quando a busca está aberta */}
+            {/* O Banner de suporte fica aqui caso o usuário esteja pesquisando */}
             <div className="w-full mt-16 mb-4">
               <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-full rounded-[2rem] overflow-hidden block transition-transform hover:scale-[1.02] shadow-2xl">
                 <SmartImage src="/SUPORTE.png" alt="Suporte" className="w-full h-full" />
@@ -589,99 +687,14 @@ export default function Catalogo() {
           </div>
         ) : (
           <>
-            {/* MENU RÁPIDO */}
-            {categoriasAtivas.length > 0 && (
-              <FadeInSection className="w-full mb-4 px-2">
-                <div className="flex items-center gap-2 mb-5">
-                  <h3 className="text-xs font-black text-white uppercase tracking-widest whitespace-nowrap">MENU RÁPIDO:</h3>
-                  <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
-                </div>
-                <div className="relative flex items-center w-full">
-                  {showMenuLeft && (
-                    <button onClick={() => scroll(menuRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
-                  )}
-                  <div ref={menuRef} onScroll={() => updateArrows(menuRef, setShowMenuLeft, setShowMenuRight)} className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden">
-                    {categoriasAtivas.map((cat) => (
-                      <a key={cat.id} href={cat.link} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center flex-shrink-0 group">
-                        <div className="w-32 h-48 rounded-2xl border-[3px] bg-[#111] overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-md" style={{ borderColor: `${temaCor}60` }}>
-                          <SmartImage src={cat.img} alt={cat.titulo} className="w-full h-full" />
-                        </div>
-                        <span className="text-[10px] font-bold uppercase text-center text-gray-400 mt-2 transition-colors group-hover:text-white">{cat.titulo}</span>
-                      </a>
-                    ))}
-                  </div>
-                  {showMenuRight && (
-                    <button onClick={() => scroll(menuRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
-                  )}
-                </div>
-              </FadeInSection>
-            )}
-
-            {/* BANNERS CATEGORIAS EM DESTAQUE */}
-            <div className="w-full mb-8 px-2 flex flex-col gap-6">
-              <FadeInSection>
-                <div className="flex items-center gap-2 mb-0">
-                  <h3 className="text-xs font-black text-white uppercase tracking-widest whitespace-nowrap">CATEGORIAS EM DESTAQUE:</h3>
-                  <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
-                </div>
-              </FadeInSection>
-              
-              {catalogo?.categorias?.cortaVento !== false && (
-                <FadeInSection>
-                  <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="w-full rounded-[20px] overflow-hidden border-[3px] block transition-transform duration-300 hover:scale-[1.02] shadow-md" style={{ borderColor: `${temaCor}60` }}>
-                    <SmartImage src="/corta-vento.jpg" eager={true} className="w-full h-full" />
-                  </a>
-                </FadeInSection>
-              )}
-
-              {catalogo?.categorias?.retro !== false && (
-                <FadeInSection>
-                  <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="w-full rounded-[20px] overflow-hidden border-[3px] block transition-transform duration-300 hover:scale-[1.02] shadow-md" style={{ borderColor: `${temaCor}60` }}>
-                    <SmartImage src="/retro.jpg" className="w-full h-full" />
-                  </a>
-                </FadeInSection>
-              )}
-
-              {/* PREÇOS DINÂMICOS */}
-              {precosFormatados.length > 0 && (
-                <FadeInSection className="w-full mt-2 mb-2">
-                  <div className="flex items-center gap-2 mb-4">
-                    <h3 className="text-xs font-black text-white uppercase tracking-widest whitespace-nowrap">TABELA DE PREÇOS:</h3>
-                    <div className="h-[1px] flex-grow bg-gradient-to-r to-transparent" style={{ backgroundImage: `linear-gradient(to right, ${temaCor}80, transparent)` }}></div>
-                  </div>
-                  <div className="relative flex items-center w-full">
-                    {showPrecosLeft && (
-                      <button onClick={() => scroll(precosRef, 'left')} className="absolute -left-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronLeft className="w-5 h-5" /></button>
-                    )}
-                    <div ref={precosRef} onScroll={() => updateArrows(precosRef, setShowPrecosLeft, setShowPrecosRight)} className="flex overflow-x-auto gap-4 pb-4 w-full [&::-webkit-scrollbar]:hidden">
-                      {precosFormatados.map((preco) => (
-                        <div key={preco.id} className="w-36 h-20 rounded-2xl border-[3px] bg-[#111] flex flex-col items-center justify-center p-3 flex-shrink-0 transition-transform duration-300 hover:scale-105 shadow-md" style={{ borderColor: `${temaCor}40` }}>
-                          <span className="text-[10px] font-black text-gray-400 uppercase mb-1 text-center">{preco.titulo}</span>
-                          <span className="text-[17px] font-black text-white" style={{ color: temaCor }}>{preco.precoFinal}</span>
-                        </div>
-                      ))}
-                    </div>
-                    {showPrecosRight && (
-                      <button onClick={() => scroll(precosRef, 'right')} className="absolute -right-2 z-20 w-8 h-8 rounded-full bg-[#222] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"><ChevronRight className="w-5 h-5" /></button>
-                    )}
-                  </div>
-                </FadeInSection>
-              )}
-
-              <FadeInSection>
-                <div className="w-full rounded-[20px] overflow-hidden border-[3px] block shadow-md" style={{ borderColor: `${temaCor}60` }}>
-                  <SmartImage src="/entrega_02.jpg" alt="Entrega Rápida" className="w-full h-full" />
-                </div>
-              </FadeInSection>
-            </div>
-
+            {/* FIFA BANNER */}
             <FadeInSection className="w-full px-2 mb-10">
               <div className="w-full rounded-[20px] overflow-hidden border-[3px] bg-[#111] shadow-lg transition-transform hover:scale-[1.02]" style={{ borderColor: `${temaCor}60` }}>
                 <SmartImage src="/fifa.jpg" alt="FIFA Banner" className="w-full h-full" />
               </div>
             </FadeInSection>
 
-            {/* SELEÇÕES */}
+            {/* SELEÇÕES (Sincronizado com Formulário) */}
             {catalogo?.ligas?.selecoes !== false && (
               <FadeInSection className="w-full px-2 mb-8">
                 <div className="flex items-center gap-2 mb-5">
@@ -940,21 +953,21 @@ export default function Catalogo() {
               </>
             )}
 
-            {/* BANNER SUPORTE MODO NORMAL (Com espaçamento corrigido) */}
-            <FadeInSection className="w-full px-2 -mt-6 mb-8">
-              <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-full rounded-[2rem] overflow-hidden block transition-transform hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.3)]">
+            {/* BANNER SUPORTE MODO NORMAL */}
+            <FadeInSection className="w-full px-2 mt-4 mb-4">
+              <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-full rounded-[2rem] overflow-hidden block transition-transform hover:scale-[1.02] shadow-2xl">
                 <SmartImage src="/SUPORTE.png" alt="Suporte" className="w-full h-full" />
               </a>
             </FadeInSection>
           </>
         )}
 
-    {/* ===================================================================== */}
-        {/* ASSINATURA PREMIUM HYPERKATALOGO                                      */}
         {/* ===================================================================== */}
-        <FadeInSection className="w-full mt-21 mb-16 flex flex-col items-center justify-center px-2">
+        {/* ASSINATURA PREMIUM HYPERKATALOGO (Afastada para baixo com mt-36)      */}
+        {/* ===================================================================== */}
+        <FadeInSection className="w-full mt-36 mb-12 flex flex-col items-center justify-center px-2">
           <a
-            href="https://wa.me/5567993053894?text=Olá! Gostaria de saber mais sobre como criar um catálogo."
+            href={assinaturaLink}
             target="_blank"
             rel="noopener noreferrer"
             className="flex flex-col items-center w-full group md:hover:scale-[1.01] transition-transform duration-500 ease-out"
@@ -965,7 +978,6 @@ export default function Catalogo() {
                 className="absolute inset-0"
                 style={{ backgroundImage: 'linear-gradient(to right, transparent, #007AFF, transparent)' }} 
               />
-              {/* Glow ativado apenas no Hover (Desktop) */}
               <div 
                 className="absolute inset-0 opacity-0 md:group-hover:opacity-100 transition-opacity duration-700 blur-[3px]"
                 style={{ backgroundImage: 'linear-gradient(to right, transparent, #007AFF, transparent)' }} 
@@ -974,7 +986,7 @@ export default function Catalogo() {
 
             {/* POWERED BY */}
             <span className="text-[9px] font-semibold text-[#7A7A7A] uppercase tracking-[0.4em] mb-1.5">
-              Criado por:
+              Powered by
             </span>
 
             {/* NOME DA MARCA */}
@@ -989,7 +1001,22 @@ export default function Catalogo() {
               Plataforma profissional para catálogos esportivos.
             </span>
 
-           
+            {/* SELO DE DESENVOLVEDOR (PILL) */}
+            <div 
+              className="flex items-center gap-2 px-4 py-1.5 rounded-full border transition-colors duration-500"
+              style={{ 
+                backgroundColor: '#007AFF1A', 
+                borderColor: '#007AFF33',     
+                color: '#007AFF'              
+              }}
+            >
+              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span className="text-[9px] font-bold tracking-wider uppercase pt-px">
+                Desenvolvido com HyperKatalogo
+              </span>
+            </div>
           </a>
         </FadeInSection>
 
