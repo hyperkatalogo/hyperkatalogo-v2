@@ -245,9 +245,9 @@ const BUNDESLIGA_ITEMS = [
 ];
 
 // ============================================================================
-// COMPONENTE OTIMIZADO: SMART IMAGE (LAZY LOAD SEGURO)
+// COMPONENTES OTIMIZADOS
 // ============================================================================
-const SmartImage = memo(({ src, alt, className, eager = false }: any) => {
+const SmartImage = memo(({ src, alt, className, eager = false, imgClass = "object-cover" }: any) => {
   const [loaded, setLoaded] = useState(false);
   return (
     <div className={`relative ${className}`}>
@@ -258,26 +258,21 @@ const SmartImage = memo(({ src, alt, className, eager = false }: any) => {
         loading={eager ? "eager" : "lazy"}
         onLoad={() => setLoaded(true)}
         onError={(e) => { e.currentTarget.style.display = 'none'; }}
-        className={`w-full h-full object-cover transition-opacity duration-300 relative z-10 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`w-full h-full ${imgClass} transition-opacity duration-300 relative z-10 ${loaded ? 'opacity-100' : 'opacity-0'}`}
       />
     </div>
   );
 });
 
-// ============================================================================
-// COMPONENTE: FADE IN SECTION (SISTEMA ULTRA SEGURO PARA iOS)
-// ============================================================================
 const FadeInSection = memo(({ children, className = "" }: any) => {
   const [isVisible, setVisible] = useState(false);
   const domRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // FALLBACK RIGOROSO: Se o motor Safari do iOS não tiver suporte ou der erro, o conteúdo aparece direto.
     if (typeof window === 'undefined' || !window.IntersectionObserver) {
       setVisible(true);
       return;
     }
-
     try {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -398,13 +393,6 @@ export default function Catalogo() {
   useEffect(() => {
     if (catalogo) {
       document.title = catalogo.store_name || 'HyperKatalogo';
-      let favicon = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
-      if (!favicon) {
-        favicon = document.createElement("link");
-        favicon.rel = "icon";
-        document.head.appendChild(favicon);
-      }
-      favicon.href = catalogo.logo_url || '/logo.jpg';
     }
   }, [catalogo]);
 
@@ -451,7 +439,7 @@ export default function Catalogo() {
 
   if (loading) return (
     <div className="min-h-screen w-full bg-[#050505] flex flex-col items-center justify-center pt-12 px-4 pb-28 text-white">
-      <p className="font-bold tracking-widest text-sm">CARREGANDO CATÁLOGO...</p>
+      <p className="animate-pulse font-bold tracking-widest text-sm">CARREGANDO CATÁLOGO...</p>
     </div>
   );
 
@@ -471,15 +459,17 @@ export default function Catalogo() {
         
         <h2 className="text-[10px] font-bold text-gray-400 mb-5 uppercase tracking-widest">Catálogo Oficial</h2>
 
-        <div className="w-28 h-28 rounded-full border-[3px] bg-black p-1 flex items-center justify-center overflow-hidden mb-6 shadow-xl transition-transform hover:scale-105" style={{ borderColor: temaCor, boxShadow: `0 0 30px ${temaCor}40` }}>
-          <SmartImage src={catalogo?.logo_url || "/logo.jpg"} alt="Logo" eager={true} className="rounded-full" />
+        {/* LOGO CORRIGIDA */}
+        <div className="w-28 h-28 rounded-full border-[3px] bg-white flex items-center justify-center overflow-hidden mb-6 shadow-xl transition-transform hover:scale-105" style={{ borderColor: temaCor, boxShadow: `0 0 30px ${temaCor}40` }}>
+          <SmartImage src={catalogo?.logo_url || "/logo.jpg"} alt="Logo" eager={true} className="w-full h-full rounded-full" imgClass="object-contain" />
         </div>
         
         <h1 className="text-[28px] font-black uppercase text-center mb-10 tracking-tight">{catalogo?.store_name || "HYPERKATÁLOGO"}</h1>
 
-        <div className="flex items-center gap-2 mb-10 bg-[#111] px-5 py-2.5 rounded-full border border-[#333] shadow-md transition-transform hover:scale-105">
-          <MousePointerClick size={16} style={{ color: temaCor }} />
-          <span className="text-[10px] font-black text-gray-200 uppercase">Clique para interagir</span>
+        {/* CLIQUE PARA INTERAGIR MELHORADO */}
+        <div className="flex items-center gap-2.5 mb-10 bg-gradient-to-r from-[#111] via-[#1a1a1a] to-[#111] px-6 py-3 rounded-full border border-[#333] shadow-md transition-transform hover:scale-105">
+          <MousePointerClick size={18} className="animate-bounce" style={{ color: temaCor }} />
+          <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Clique para interagir</span>
         </div>
 
         {/* REDES SOCIAIS */}
@@ -487,7 +477,7 @@ export default function Catalogo() {
         <div className="flex items-start justify-center gap-6 mb-10">
           {catalogo?.instagram && (
             <div className="flex flex-col items-center gap-2.5 group">
-              <a href={catalogo.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-lg">
+              <a href={catalogo.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-lg border border-[#333]">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
               </a>
               <span className="text-[9px] font-bold text-gray-400 uppercase">Instagram</span>
@@ -495,7 +485,7 @@ export default function Catalogo() {
           )}
           
           <div className="flex flex-col items-center gap-2.5 group">
-            <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-lg">
+            <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-lg border border-[#333]">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
               </svg>
@@ -503,23 +493,29 @@ export default function Catalogo() {
             <span className="text-[9px] font-bold text-gray-400 uppercase">WhatsApp</span>
           </div>
 
+          {/* TIKTOK COM IMAGEM PNG */}
           {catalogo?.tiktok && (
             <div className="flex flex-col items-center gap-2.5 group">
-              <a href={catalogo.tiktok} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#111] flex items-center justify-center text-white transition-transform hover:scale-110 shadow-lg">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+              <a href={catalogo.tiktok} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#111] flex items-center justify-center transition-transform hover:scale-110 shadow-lg border border-[#333]">
+                <img src="/logottk.png" alt="TikTok" className="w-6 h-6 object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
               </a>
               <span className="text-[9px] font-bold text-gray-400 uppercase">TikTok</span>
             </div>
           )}
         </div>
 
-        {/* BOTÕES EXTRAS */}
+        {/* BOTÕES EXTRAS MELHORADOS */}
         <div className="w-full flex flex-col gap-4 px-2 mb-12">
-          <a href="https://drive.google.com/drive/folders/1huxHu6yQruZTX-2E0vQTMHyW68tFnrsF?usp=share_link" target="_blank" rel="noopener noreferrer" className="w-full h-[60px] px-4 text-white font-bold text-xs rounded-full flex items-center justify-center gap-3 text-center transition-transform hover:scale-[1.02] shadow-lg" style={{ backgroundColor: temaCor }}>
-            <Shirt className="w-5 h-5" /> TABELA DE MEDIDAS
+          <a href="https://drive.google.com/drive/folders/1huxHu6yQruZTX-2E0vQTMHyW68tFnrsF?usp=share_link" target="_blank" rel="noopener noreferrer" className="relative w-full h-[60px] rounded-2xl overflow-hidden group shadow-lg transition-transform hover:scale-[1.02] flex items-center justify-center gap-3 border" style={{ borderColor: `${temaCor}50`, backgroundColor: `${temaCor}15` }}>
+            <div className="absolute inset-0 opacity-20 transition-opacity group-hover:opacity-30" style={{ background: `linear-gradient(90deg, transparent, ${temaCor}, transparent)` }}></div>
+            <Shirt className="w-5 h-5 relative z-10" style={{ color: temaCor }} />
+            <span className="text-white font-bold text-xs tracking-wider relative z-10">TABELA DE MEDIDAS</span>
           </a>
-          <a href="https://melhorrastreio.com.br/" target="_blank" rel="noopener noreferrer" className="w-full h-[60px] px-4 bg-[#111] border-[3px] text-white font-bold text-xs rounded-full flex items-center justify-center gap-3 text-center transition-transform hover:scale-[1.02] shadow-lg" style={{ borderColor: temaCor }}>
-            <Truck className="w-5 h-5" style={{ color: temaCor }} /> RASTREIE O SEU PEDIDO
+
+          <a href="https://melhorrastreio.com.br/" target="_blank" rel="noopener noreferrer" className="relative w-full h-[60px] rounded-2xl overflow-hidden group shadow-lg transition-transform hover:scale-[1.02] flex items-center justify-center gap-3 border border-[#333] bg-[#111]">
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-white/5"></div>
+            <Truck className="w-5 h-5 relative z-10 text-gray-400 group-hover:text-white transition-colors" />
+            <span className="text-gray-300 group-hover:text-white transition-colors font-bold text-xs tracking-wider relative z-10">RASTREIE O SEU PEDIDO</span>
           </a>
         </div>
 
@@ -534,7 +530,7 @@ export default function Catalogo() {
               {CATEGORIAS.map((cat) => (
                 <a key={cat.id} href={cat.link} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 flex-shrink-0 group">
                   <div className="w-32 h-48 rounded-2xl border-[3px] bg-[#111] overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-md" style={{ borderColor: `${temaCor}40` }}>
-                    <SmartImage src={cat.img} alt={cat.titulo} className="rounded-xl" />
+                    <SmartImage src={cat.img} alt={cat.titulo} className="w-full h-full rounded-xl" />
                   </div>
                   <span className="text-[9px] font-black uppercase text-center text-gray-400 mt-1 transition-colors group-hover:text-white">{cat.titulo}</span>
                 </a>
@@ -546,7 +542,7 @@ export default function Catalogo() {
           </div>
         </FadeInSection>
 
-        {/* BANNERS */}
+        {/* BANNERS COM SOMBRAS ELEGANTES */}
         <div className="w-full mb-8 px-2 flex flex-col gap-6">
           <FadeInSection>
             <h3 className="text-xs font-black text-white uppercase tracking-widest">CATEGORIAS EM DESTAQUE:</h3>
@@ -556,7 +552,7 @@ export default function Catalogo() {
             <a href="https://photos.app.goo.gl/JwKbbiyrnrAv4V9LA" target="_blank" rel="noopener noreferrer" className="relative w-full rounded-3xl p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
               <div className="absolute inset-0 z-0 rounded-3xl opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
               <div className="relative w-full h-full rounded-[21px] overflow-hidden bg-[#0d1117] z-10">
-                <SmartImage src="/corta-vento.jpg" eager={true} />
+                <SmartImage src="/corta-vento.jpg" eager={true} className="w-full h-full" />
               </div>
             </a>
           </FadeInSection>
@@ -565,7 +561,7 @@ export default function Catalogo() {
             <a href="https://photos.app.goo.gl/xHESUJ4F7zd6LjEZ8" target="_blank" rel="noopener noreferrer" className="relative w-full rounded-3xl p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
               <div className="absolute inset-0 z-0 rounded-3xl opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
               <div className="relative w-full h-full rounded-[21px] overflow-hidden bg-[#0d1117] z-10">
-                <SmartImage src="/retro.jpg" />
+                <SmartImage src="/retro.jpg" className="w-full h-full" />
               </div>
             </a>
           </FadeInSection>
@@ -597,7 +593,7 @@ export default function Catalogo() {
             <div className="relative w-full rounded-3xl p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
               <div className="absolute inset-0 z-0 rounded-3xl opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
               <div className="relative w-full h-full rounded-[21px] overflow-hidden bg-[#0d1117] z-10">
-                <SmartImage src="/entrega_02.jpg" alt="Entrega Rápida" />
+                <SmartImage src="/entrega_02.jpg" alt="Entrega Rápida" className="w-full h-full" />
               </div>
             </div>
           </FadeInSection>
@@ -622,7 +618,7 @@ export default function Catalogo() {
                   return (
                     <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 group">
                       <div className="w-[72px] h-[72px] rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
-                        <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
+                        <SmartImage src={item.img} alt={item.name} className="w-full h-full p-[10px]" />
                       </div>
                       <span className="text-[10px] font-bold text-center text-gray-300 leading-tight transition-colors group-hover:text-white">{item.name}</span>
                     </a>
@@ -637,7 +633,7 @@ export default function Catalogo() {
           <>
             <FadeInSection className="w-full px-2 mb-10">
               <div className="w-full rounded-3xl overflow-hidden border-[3px] bg-[#111] shadow-lg transition-transform hover:scale-[1.02]" style={{ borderColor: `${temaCor}60` }}>
-                <SmartImage src="/fifa.jpg" alt="FIFA Banner" />
+                <SmartImage src="/fifa.jpg" alt="FIFA Banner" className="w-full h-full" />
               </div>
             </FadeInSection>
 
@@ -654,7 +650,7 @@ export default function Catalogo() {
                     return (
                       <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2.5 min-w-[80px] group">
                         <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
-                          <SmartImage src={item.img} alt={item.name} className="p-2" />
+                          <SmartImage src={item.img} alt={item.name} className="w-full h-full p-2" />
                         </div>
                         <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
@@ -672,7 +668,7 @@ export default function Catalogo() {
               <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
                 <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
-                  <SmartImage src="/brasileirao.png" alt="Brasileirão Banner" />
+                  <SmartImage src="/brasileirao.png" alt="Brasileirão Banner" className="w-full h-full" />
                 </div>
               </div>
             </FadeInSection>
@@ -689,7 +685,7 @@ export default function Catalogo() {
                     return (
                       <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] group">
                         <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
-                          <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
+                          <SmartImage src={item.img} alt={item.name} className="w-full h-full p-[10px]" />
                         </div>
                         <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
@@ -707,7 +703,7 @@ export default function Catalogo() {
               <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
                 <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
-                  <SmartImage src="/laliga.png" alt="La Liga Banner" />
+                  <SmartImage src="/laliga.png" alt="La Liga Banner" className="w-full h-full" />
                 </div>
               </div>
             </FadeInSection>
@@ -724,7 +720,7 @@ export default function Catalogo() {
                     return (
                       <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] group">
                         <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
-                          <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
+                          <SmartImage src={item.img} alt={item.name} className="w-full h-full p-[10px]" />
                         </div>
                         <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
@@ -742,7 +738,7 @@ export default function Catalogo() {
               <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
                 <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
-                  <SmartImage src="/premier-league.png" alt="Premier League Banner" />
+                  <SmartImage src="/premier-league.png" alt="Premier League Banner" className="w-full h-full" />
                 </div>
               </div>
             </FadeInSection>
@@ -759,7 +755,7 @@ export default function Catalogo() {
                     return (
                       <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] group">
                         <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
-                          <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
+                          <SmartImage src={item.img} alt={item.name} className="w-full h-full p-[10px]" />
                         </div>
                         <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
@@ -777,7 +773,7 @@ export default function Catalogo() {
               <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
                 <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
-                  <SmartImage src="/serie-a.png" alt="Serie A Banner" />
+                  <SmartImage src="/serie-a.png" alt="Serie A Banner" className="w-full h-full" />
                 </div>
               </div>
             </FadeInSection>
@@ -794,7 +790,7 @@ export default function Catalogo() {
                     return (
                       <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] group">
                         <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
-                          <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
+                          <SmartImage src={item.img} alt={item.name} className="w-full h-full p-[10px]" />
                         </div>
                         <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
@@ -812,7 +808,7 @@ export default function Catalogo() {
               <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
                 <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
-                  <SmartImage src="/ligue-1.png" alt="Ligue 1 Banner" />
+                  <SmartImage src="/ligue-1.png" alt="Ligue 1 Banner" className="w-full h-full" />
                 </div>
               </div>
             </FadeInSection>
@@ -829,7 +825,7 @@ export default function Catalogo() {
                     return (
                       <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] group">
                         <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
-                          <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
+                          <SmartImage src={item.img} alt={item.name} className="w-full h-full p-[10px]" />
                         </div>
                         <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
@@ -847,7 +843,7 @@ export default function Catalogo() {
               <div className="relative w-full rounded-[2rem] p-[3px] block transition-transform duration-500 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="absolute inset-0 z-0 rounded-[2rem] opacity-50" style={{ background: `linear-gradient(135deg, ${temaCor}80, transparent, ${temaCor}80)` }}></div>
                 <div className="relative w-full h-full rounded-[29px] overflow-hidden bg-[#0d1117] z-10">
-                  <SmartImage src="/bundesliga.png" alt="Bundesliga Banner" />
+                  <SmartImage src="/bundesliga.png" alt="Bundesliga Banner" className="w-full h-full" />
                 </div>
               </div>
             </FadeInSection>
@@ -864,7 +860,7 @@ export default function Catalogo() {
                     return (
                       <a key={item.id} href={urlDestino} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-3 min-w-[85px] group">
                         <div className="w-20 h-20 rounded-full border-[3px] bg-[#111] flex items-center justify-center overflow-hidden shadow-md transition-transform duration-300 group-hover:scale-110" style={{ borderColor: temaCor }}>
-                          <SmartImage src={item.img} alt={item.name} className="p-[10px]" />
+                          <SmartImage src={item.img} alt={item.name} className="w-full h-full p-[10px]" />
                         </div>
                         <span className="text-[9px] font-black uppercase text-center text-gray-400 whitespace-pre-line transition-colors group-hover:text-white">{item.name}</span>
                       </a>
@@ -881,9 +877,9 @@ export default function Catalogo() {
         )}
 
         {/* BANNER SUPORTE */}
-        <FadeInSection className="w-full px-2 -mt-10 mb-4">
+        <FadeInSection className="w-full px-2 -mt-4 mb-4">
           <a href={whatsAppLink} target="_blank" rel="noopener noreferrer" className="w-full rounded-[2rem] overflow-hidden block transition-transform hover:scale-[1.02] shadow-2xl">
-            <SmartImage src="/SUPORTE.png" alt="Suporte" />
+            <SmartImage src="/SUPORTE.png" alt="Suporte" className="w-full h-full" />
           </a>
         </FadeInSection>
 
